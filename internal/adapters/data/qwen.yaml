@@ -1,0 +1,25 @@
+id: qwen
+match:
+  family: [qwen]
+wire: openai-completions
+capabilities:
+  tools: true
+  strict_json_schema: partial
+  developer_role: false
+compat:
+  multiple_system_messages: true
+  assistant_after_tool_result: true
+  thinking_as_text: false
+  reasoning_content_field: reasoning_content
+  retry_without_strict_on_grammar_error: false
+  disable_reasoning_with_tools: false
+  filter_reasoning_history: true
+  openai_tool_call_id_limit: false
+
+quirks:
+  - "Tool-strong but drifts on long contexts; do not rely on a detail stated more than a few turns back without re-reading it."
+  - "May wrap list-valued arguments in a string; the harness repairs this."
+instructions:
+  - "Emit one tool call per turn."
+  - "Re-read a file before editing it a second time."
+  - "On a failing tool call, change the argument or the strategy. Never resubmit the identical call twice."

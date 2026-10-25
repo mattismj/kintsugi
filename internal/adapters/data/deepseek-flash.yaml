@@ -1,0 +1,26 @@
+id: deepseek-flash
+match:
+  family: [deepseek]
+  reasoning: false
+wire: openai-completions
+capabilities:
+  tools: true
+  strict_json_schema: partial
+  developer_role: false
+compat:
+  multiple_system_messages: true
+  assistant_after_tool_result: true
+  thinking_as_text: false
+  reasoning_content_field: reasoning_content
+  retry_without_strict_on_grammar_error: false
+  disable_reasoning_with_tools: false
+  filter_reasoning_history: true
+  openai_tool_call_id_limit: false
+
+quirks:
+  - "Tool-call shapes can be compositionally malformed: null for optional fields, a JSON array returned as a string, a single argument wrapped in an object, a bare string where an array is expected. The harness repairs these; read the repaired result and continue."
+  - "A file path can be emitted as a markdown autolink (\"[notes.md](http://notes.md)\"); the harness normalizes it, but paths should be plain strings."
+  - "Prompt caching is strong; keep the system prompt stable and do not restate the task every turn."
+instructions:
+  - "Emit one tool call per turn: the harness executes calls serially."
+  - "On a failing tool call, change the argument or the strategy. Never resubmit the identical call twice."

@@ -1,0 +1,86 @@
+.TH KINTSUGI-SCHEDULE 1 "2026-10-26" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-schedule \- scheduled one-shot and recurring jobs from a cron expression
+.SH SYNOPSIS
+.B kintsugi schedule
+add "\fIcron\fR" "\fItask\fR"
+.br
+.B kintsugi schedule
+list
+.br
+.B kintsugi schedule
+trigger \fIid\fR
+.br
+.B kintsugi schedule
+pause | resume | remove \fIid\fR
+.br
+.B kintsugi schedule
+run
+.SH DESCRIPTION
+Store a cron expression and a task, and fire the task when the expression comes
+due. Jobs live in \fB.kintsugi/schedules.json\fR in the workspace, written
+atomically at 0600.
+.PP
+The five cron fields are minute, hour, day-of-month, month and day-of-week. Each
+supports \fB*\fR, a number, a range (\fBa-b\fR), a step (\fB*/n\fR or
+\fBa-b/n\fR) and comma-separated lists; month and day-of-week also accept their
+three-letter names. The shorthands \fB@hourly @daily @midnight @weekly
+@monthly\fR are accepted. Anything else is rejected with the reason \- a
+schedule that silently never fires is worse than a refusal.
+.PP
+\fBrun\fR is the foreground scheduler: it fires due jobs and waits for the next
+window until interrupted. A firing is a background run in the session hub, so it
+shows in the TUI roster and can be killed there. Delivery is local: the answer is
+printed, and one terminal notification is raised when a backend is configured in
+\fB[notify]\fR.
+.SH COMMANDS
+.IP \fBadd\fR "\fIcron\fR" "\fItask\fR"
+Store a job. Both the cron expression and the injection guard are checked here
+.IP \fBlist\fR
+Jobs with state, next firing, last firing and the last error
+.IP \fBtrigger\fR \fIid\fR
+Fire one job now. The cron is untouched; the next window is recomputed from it
+.IP \fBpause\fR \fIid\fR
+Stop the job firing. The job and its window are kept
+.IP \fBresume\fR \fIid\fR
+Start it firing again
+.IP \fBremove\fR \fIid\fR
+Delete the job
+.IP \fBrun\fR
+Foreground scheduler until ctrl-c
+.SH OPTIONS
+.IP \fB\-\-every\fR 30s
+For \fBrun\fR: how often to look for due jobs
+.IP \fB\-\-model\fR
+Provider/model to use
+.IP \fB\-\-role\fR
+Model role: default|coder|researcher|opsec
+.SH INJECTION SAFETY
+A scheduled prompt is data, never authority. It is refused when it is added, again
+when it fires, and again inside the runner before the prompt is built, so a
+hand-edited jobs file cannot smuggle one in. A payload that tries to grant a
+permission, widen the declared scope, or write authorization or scope context is
+rejected; the refusal is logged as a class and a rule label, never as the text
+that tried. A scheduled turn may not change the permission matrix, the scope, the
+sandbox posture, the attestation, or a hook: none of those are read from task
+text anywhere in the harness.
+.SH EXAMPLES
+Ask for a nightly summary:
+.PP
+  $ kintsugi schedule add "0 3 * * *" "summarise yesterday's commits into NOTES.md"
+.PP
+List what is scheduled:
+.PP
+  $ kintsugi schedule list
+.PP
+Test a job without waiting for its window:
+.PP
+  $ kintsugi schedule trigger job-1
+.PP
+Run the scheduler in a terminal:
+.PP
+  $ kintsugi schedule run --every 30s
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-loop (1),
+.BR kintsugi-run (1)

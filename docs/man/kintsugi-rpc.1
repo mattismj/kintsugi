@@ -1,0 +1,57 @@
+.TH KINTSUGI-RPC 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-rpc \- JSON-RPC loopback API
+.SH SYNOPSIS
+.B kintsugi rpc
+.RB [ \-\-mode
+.IR stdio|tcp|http ]
+.RB [ \-\-addr
+.IR host:port ]
+.RB [ \-\-auth
+.IR secret ]
+.SH DESCRIPTION
+Serve the harness over JSON-RPC 2.0 so an external client \- an editor, a web UI,
+another agent \- can drive it.
+.PP
+The server binds loopback only. \fBstdio\fR speaks newline-delimited JSON on
+standard input and output. \fBtcp\fR speaks one JSON-RPC message per line, with an
+optional shared secret sent as a leading \fBAUTH <secret>\fR line. \fBhttp\fR
+accepts a POST per request, with the secret sent as
+\fBAuthorization: Bearer <secret>\fR.
+.PP
+A non-loopback address is refused rather than bound: the API carries the
+operator's tool authority, so it is never reachable from the network.
+.SH METHODS
+.TP
+.B initialize
+Report the server's protocol version and capabilities.
+.TP
+.B session/new
+Open a session; returns its id.
+.TP
+.B session/prompt
+Run one turn in a session.
+.TP
+.B session/cancel
+Abandon the turn in flight.
+.TP
+.B session/list
+List the sessions this server knows.
+.SH OPTIONS
+.IP \fB\-\-mode\fR
+Transport: stdio (default), tcp, or http.
+.IP \fB\-\-addr\fR
+Listen address for tcp/http. Must be loopback. Default 127.0.0.1:9876.
+.IP \fB\-\-auth\fR
+Shared secret required by tcp/http clients.
+.SH EXAMPLES
+Speak JSON-RPC on stdio:
+.PP
+  $ kintsugi rpc
+.PP
+Serve on loopback with a secret:
+.PP
+  $ kintsugi rpc --mode tcp --addr 127.0.0.1:9876 --auth "$FORGE_RPC_SECRET"
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-run (1)

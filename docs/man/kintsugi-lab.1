@@ -1,0 +1,36 @@
+.TH KINTSUGI-LAB 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-lab \- compose lab management
+.SH SYNOPSIS
+.B kintsugi lab
+up
+.br
+.B kintsugi lab
+down
+.br
+.B kintsugi lab
+status
+.SH DESCRIPTION
+Bring up, tear down, or inspect the compose lab. Labs are synthetic,
+egress-free environments for testing.
+.SH COMMANDS
+.IP \fBup\fR
+Bring up the lab
+.IP \fBdown\fR
+Tear down the lab
+.IP \fBstatus\fR
+Inspect the lab
+.SH EXAMPLES
+Start the lab:
+.PP
+  $ kintsugi lab up
+.PP
+Check status:
+.PP
+  $ kintsugi lab status
+.PP
+Stop the lab:
+.PP
+  $ kintsugi lab down
+.SH SEE ALSO
+.BR kintsugi (1)

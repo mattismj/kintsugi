@@ -1,0 +1,47 @@
+.TH KINTSUGI-KB 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-kb \- knowledge base management
+.SH SYNOPSIS
+.B kintsugi kb
+build <stix> <out>
+.br
+.B kintsugi kb
+reindex <dir>
+.br
+.B kintsugi kb
+search <dir> "<query>" [\-\-top N]
+.br
+.B kintsugi kb
+list <dir>
+.SH DESCRIPTION
+Manage knowledge bases built from MITRE CTI STIX bundles.
+.SH COMMANDS
+.IP \fBbuild\fR
+Build a KB from a STIX bundle
+.IP \fBreindex\fR
+Rebuild the derived BM25 index
+.IP \fBsearch\fR
+Rank chunks with BM25
+.IP \fBlist\fR
+Show base id/version/title and chunk count
+.SH OPTIONS
+.IP \fB\-\-top\fR
+Number of results (search, default 8)
+.SH EXAMPLES
+Build a knowledge base:
+.PP
+  $ kintsugi kb build bundle.json kb/
+.PP
+Rebuild index:
+.PP
+  $ kintsugi kb reindex kb/
+.PP
+Search:
+.PP
+  $ kintsugi kb search kb/ "lateral movement"
+.PP
+List KB contents:
+.PP
+  $ kintsugi kb list kb/
+.SH SEE ALSO
+.BR kintsugi (1)

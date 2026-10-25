@@ -1,0 +1,7 @@
+{
+  "name": "bare JSON string as path",
+  "tool": "read",
+  "input": "README.md",
+  "want_classes": ["bare-path"],
+  "want_path": "README.md"
+}

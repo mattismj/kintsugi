@@ -1,0 +1,134 @@
+.TH KINTSUGI 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi \- privacy-first agent harness for open-weights models
+.SH SYNOPSIS
+.B kintsugi
+[command] [flags]
+.SH DESCRIPTION
+Kintsugi is a local-first agent harness that runs open-weights models against your
+codebase. It keeps your data on disk, refuses to upload telemetry, and gives
+you explicit control over every tool the agent can call.
+.PP
+Run
+.B kintsugi
+with no arguments to start the interactive TUI session.
+.SH COMMANDS
+.IP \fBtui\fR
+Interactive session (default)
+.IP \fBrun\fR
+Run one task to completion
+.IP \fBplan\fR
+Read-only planning turn
+.IP \fBhooks\fR
+Manage workspace hooks
+.IP \fBaudit\fR
+View permission decisions
+.IP \fBprompt\fR
+Inspect the compiled prompt
+.IP \fBmodels\fR
+List providers and models
+.IP \fBpack\fR
+Persona pack management
+.IP \fBskills\fR
+Workspace skills
+.IP \fBcontext\fR
+Manage CONTEXT.md
+.IP \fBledger\fR
+Accepted work ledger
+.IP \fBtaste\fR
+Operator taste preferences
+.IP \fBrecall\fR
+Search prior accepted work
+.IP \fBpersona\fR
+Persona triggers
+.IP \fBmemory\fR
+Lessons and skills search
+.IP \fBsession\fR
+Session management
+.IP \fBdoctor\fR
+Environment readiness check
+.IP \fBrepair\fR
+Tool repair statistics
+.IP \fBrefusal\fR
+Refusal telemetry
+.IP \fBgate\fR
+Opsec review gate
+.IP \fBdag\fR
+Run a node plan
+.IP \fBrules\fR
+Rule file management
+.IP \fBquota\fR
+Token usage vs limits
+.IP \fBreport\fR
+Findings report
+.IP \fBinit\fR
+Scaffold a workspace
+.IP \fBconnect\fR
+Verify and store API keys
+.IP \fBsetup\fR
+Install persona pack
+.IP \fBnew\fR
+Scaffold a project
+.IP \fBvalidate\fR
+Provider validation
+.IP \fBcheckpoint\fR
+Session snapshots
+.IP \fBrewind\fR
+Rewind to a checkpoint
+.IP \fBkb\fR
+Knowledge base management
+.IP \fBlab\fR
+Compose lab management
+.IP \fBmods\fR
+Mod manifests
+.IP \fBdocs\fR
+Show man pages
+.IP \fBloop\fR
+Self-paced loops
+.IP \fBschedule\fR
+Scheduled jobs from a cron expression
+.IP \fBversion\fR
+Print version
+.IP \fBhelp\fR
+Show usage
+.SH OPTIONS
+.IP \fB\-\-no\-alt\-screen\fR
+Keep output in scrollback
+.IP \fB\-\-no\-mouse\fR
+Disable mouse-wheel scrolling
+.IP \fB\-\-no\-boot\fR
+Skip the boot nameplate
+.IP \fB\-\-plain\fR
+Force line-based REPL
+.SH ENVIRONMENT
+.IP \fBFORGE_MODEL\fR
+Override the default model
+.IP \fBFORGE_MODE\fR
+Override the core mode (online/offline)
+.IP \fBFORGE_CONFIG\fR
+Path to config file
+.IP \fBFORGE_WORKSPACE\fR
+Override the workspace directory
+.SH EXAMPLES
+Start an interactive session:
+.PP
+  $ kintsugi
+.PP
+Run a task headlessly:
+.PP
+  $ kintsugi run "add error handling to main.go"
+.PP
+Check environment readiness:
+.PP
+  $ kintsugi doctor
+.PP
+List configured models:
+.PP
+  $ kintsugi models
+.SH SEE ALSO
+.BR kintsugi-run (1),
+.BR kintsugi-plan (1),
+.BR kintsugi-connect (1),
+.BR kintsugi-loop (1),
+.BR kintsugi-schedule (1),
+.BR kintsugi-doctor (1)

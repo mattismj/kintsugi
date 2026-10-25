@@ -1,0 +1,35 @@
+.TH KINTSUGI-PLAN 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-plan \- read-only planning turn
+.SH SYNOPSIS
+.B kintsugi plan
+"<task>"
+.br
+.B kintsugi plan
+list
+.br
+.B kintsugi plan
+show <name>
+.SH DESCRIPTION
+Run a read-only planning turn. The agent analyzes the task and writes a plan
+to .kintsugi/plans/ without making any code changes.
+.SH OPTIONS
+.IP \fB\-\-model\fR
+Provider/model to use
+.IP \fB\-\-persona\fR
+Persona name override
+.SH EXAMPLES
+Create a plan:
+.PP
+  $ kintsugi plan "refactor the authentication module"
+.PP
+List saved plans:
+.PP
+  $ kintsugi plan list
+.PP
+View a specific plan:
+.PP
+  $ kintsugi plan show refactor-auth
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-run (1)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Sandbox modes — Example Docs</title>
+<link rel="canonical" href="https://docs.example.com/sandbox">
+</head>
+<body>
+<nav class="sidebar">
+  <a href="/docs/intro">Intro</a>
+  <a href="/search?q=sandbox">Search</a>
+  <a href="/login">Sign in</a>
+</nav>
+<main>
+  <h1>Sandbox modes</h1>
+  <p>A sandbox binds what a command can touch. There are three modes.</p>
+  <h2>readonly</h2>
+  <p>The workspace is mounted read-only; everything else is not mounted at all.</p>
+  <h2>workspace</h2>
+  <p>The workspace is mounted read-write.</p>
+  <pre><code class="language-toml">[sandbox]
+mode = "workspace"
+network = "loopback"</code></pre>
+  <h2>Allowlist</h2>
+  <table>
+    <tr><th>value</th><th>meaning</th></tr>
+    <tr><td>none</td><td>no egress</td></tr>
+    <tr><td>loopback</td><td>127.0.0.1 only</td></tr>
+  </table>
+  <ul><li>a promised sandbox is never silently dropped</li></ul>
+  <blockquote>An unavailable backend refuses the command instead of running it unsandboxed.</blockquote>
+  <p>Read more in the <a href="/docs/network">network guide</a> and the <a href="https://example.com/spec">specification</a>.</p>
+</main>
+<footer><a href="/site/terms">Terms</a></footer>
+</body>
+</html>

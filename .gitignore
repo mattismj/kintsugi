@@ -1,0 +1,35 @@
+/kintsugi
+kintsugi-
+node_modules/
+dist/
+*.test
+.kintsugi/manifests/
+.kintsugi/index.sqlite
+# The operator's personal refusal corpus: local, never uploaded.
+.kintsugi/refusal-corpus/
+.kintsugi/proposals/
+# Derived FTS5 index of the context ledger; rebuilt on first use. The ledger
+# markdown itself (ledger.md) stays committable: it is the accepted-work record
+# that travels with the workspace.
+.kintsugi/ledger/index.sqlite
+# Operator-local tool state: command-code permissions and taste for this
+# machine. Not project source.
+.commandcode/
+# Derived BM25 index of each knowledge base; EnsureIndex rebuilds it from the
+# chunks on first use.
+knowledgebases/*/index.sqlite
+# Internal planning documents. They stay on this machine but are not part of
+# the published repository.
+/DESIGN.md
+/DESIGN-v1.md
+/ROADMAP.md
+/IDEAS.md
+/M12D_IMPLEMENTATION.md
+/TESTERS.md
+/docs/handoff-m8-m10-m12.md
+/docs/plans-status.md
+
+/spike/go/forge
+
+# Night work order — local only, never pushed.
+/NIGHT-WORK*.md

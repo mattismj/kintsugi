@@ -1,0 +1,8 @@
+// Package broken is deliberately unparseable: the map must skip it, never
+// fail on it.
+//
+// The source is kept as ".txt" so that repository-wide formatters (gofmt)
+// do not choke on it; the test copies it into a tree as "bad.go".
+package broken
+
+func Broken( {

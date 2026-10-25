@@ -1,0 +1,29 @@
+.TH KINTSUGI-CHECKPOINT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-checkpoint \- session snapshots
+.SH SYNOPSIS
+.B kintsugi checkpoint
+<id> [label]
+.br
+.B kintsugi checkpoint
+list <id>
+.SH DESCRIPTION
+Snapshot a session's history as a rewind point. Checkpoints let you return to
+a previous state.
+.SH COMMANDS
+.IP \fB<id> [label]\fR
+Create a checkpoint
+.IP \fBlist\fR
+List checkpoints for a session
+.SH EXAMPLES
+Create a checkpoint:
+.PP
+  $ kintsugi checkpoint abc123 "before refactor"
+.PP
+List checkpoints:
+.PP
+  $ kintsugi checkpoint list abc123
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-rewind (1),
+.BR kintsugi-session (1)

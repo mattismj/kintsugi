@@ -1,0 +1,23 @@
+.TH KINTSUGI-PERSONA 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-persona \- persona triggers
+.SH SYNOPSIS
+.B kintsugi persona
+triggers [\-\-apply]
+.SH DESCRIPTION
+Propose trigger-map entries from refusal telemetry. Triggers map refusal terms
+to alternative responses.
+.SH OPTIONS
+.IP \fB\-\-apply\fR
+Write the proposed triggers
+.SH EXAMPLES
+View proposed triggers:
+.PP
+  $ kintsugi persona triggers
+.PP
+Apply triggers:
+.PP
+  $ kintsugi persona triggers --apply
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-pack (1)

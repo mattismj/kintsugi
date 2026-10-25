@@ -1,0 +1,53 @@
+.TH KINTSUGI-RUN 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-run \- run one task to completion
+.SH SYNOPSIS
+.B kintsugi run
+[flags] "<task>"
+.SH DESCRIPTION
+Run a single task to completion. The agent reads your codebase, makes changes,
+and reports what it did. Output streams to stdout by default.
+.SH OPTIONS
+.IP \fB\-\-model\fR
+Provider/model to use (e.g., ollama/llama3)
+.IP \fB\-\-persona\fR
+Persona name override
+.IP \fB\-\-profile\fR
+Behavior profile
+.IP \fB\-\-yolo\fR
+Skip tool approvals (dangerous)
+.IP \fB\-\-frame\fR
+Inject Authorization & Domain context
+.IP \fB\-\-role\fR
+Model role: default|coder|researcher|opsec
+.IP \fB\-\-resume\fR
+Session id to continue
+.IP \fB\-\-output\-format\fR
+Output format: text|json|stream-json
+.IP \fB\-\-architect\fR
+Plan first on architect model, then edit
+.IP \fB\-\-architect\-model\fR
+Model for architect phase
+.SH EXAMPLES
+Run a simple task:
+.PP
+  $ kintsugi run "add error handling to main.go"
+.PP
+Use a specific model:
+.PP
+  $ kintsugi run --model ollama/llama3 "fix the bug in auth.go"
+.PP
+Plan then execute:
+.PP
+  $ kintsugi run --architect "refactor the database layer"
+.PP
+Resume a session:
+.PP
+  $ kintsugi run --resume abc123 "continue where we left off"
+.PP
+JSON output for scripting:
+.PP
+  $ kintsugi run --output-format json "list all TODOs" | jq .
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-plan (1)

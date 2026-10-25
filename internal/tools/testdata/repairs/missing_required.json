@@ -1,0 +1,6 @@
+{
+  "name": "required parameter missing after repair",
+  "tool": "read",
+  "input": {"unrelated": true},
+  "want_error": "missing required argument \"path\""
+}

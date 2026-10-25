@@ -1,0 +1,22 @@
+.TH KINTSUGI-INIT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-init \- scaffold a workspace
+.SH SYNOPSIS
+.B kintsugi init
+[\-\-force]
+.SH DESCRIPTION
+Draft CONTEXT.md and kintsugi.toml from the current directory tree.
+.SH OPTIONS
+.IP \fB\-\-force\fR
+Overwrite existing files
+.SH EXAMPLES
+Initialize a workspace:
+.PP
+  $ kintsugi init
+.PP
+Force reinitialize:
+.PP
+  $ kintsugi init --force
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-context (1)

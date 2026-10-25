@@ -1,0 +1,31 @@
+.TH KINTSUGI-DOCS 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-docs \- show man pages
+.SH SYNOPSIS
+.B kintsugi docs
+[<command>]
+.br
+.B kintsugi docs
+list
+.SH DESCRIPTION
+Print a man page for a top-level command. Tries to render through the system
+man(1) when available, falls back to plain text otherwise.
+.SH COMMANDS
+.IP \fB<command>\fR
+Show the man page for a command
+.IP \fBlist\fR
+List available man pages
+.SH EXAMPLES
+View kintsugi-run man page:
+.PP
+  $ kintsugi docs run
+.PP
+List all man pages:
+.PP
+  $ kintsugi docs list
+.PP
+View overview:
+.PP
+  $ kintsugi docs
+.SH SEE ALSO
+.BR kintsugi (1)

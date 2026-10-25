@@ -1,0 +1,8 @@
+id: attack
+version: "2026.10"
+title: "MITRE ATT&CK (Enterprise) — starter subset"
+source: "https://attack.mitre.org/"
+license: "CC BY 4.0"
+chunking:
+  strategy: per-technique
+  fields: [description, tactic, platforms]

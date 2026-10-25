@@ -1,0 +1,55 @@
+.TH KINTSUGI-LOOP 1 "2026-10-26" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-loop \- self-paced loops: run once, re-run, stop when a check cannot help
+.SH SYNOPSIS
+.B kintsugi loop
+[\fIinterval\fR] "\fItask\fR"
+.SH DESCRIPTION
+Run the task once immediately, then again on a cadence. The loop ends when
+another check cannot help: when a pass fails (the same wiring will fail the same
+way), or when two consecutive passes return the same answer. It also ends at the
+iteration ceiling or on interrupt.
+.PP
+An interval is a duration (\fB90s\fR, \fB5m\fR, \fB1h\fR) or a bare number of
+seconds. The default is 5m, the floor is 1s, and the default ceiling is 10
+checks.
+.PP
+Every pass is a background run in the session hub \- the same registry
+\fBtask(background=true)\fR and \fBagent_output\fR use \- so it appears in the TUI
+roster and can be killed there. There is no second scheduler.
+.SH OPTIONS
+.IP \fB\-\-max\fR N
+Stop after N checks (default 10)
+.IP \fB\-\-keep\-going\fR
+Continue after a failed check instead of stopping
+.IP \fB\-\-quiet\fR
+One line per check instead of the full answer
+.IP \fB\-\-model\fR
+Provider/model to use
+.IP \fB\-\-persona\fR
+Persona name override
+.IP \fB\-\-role\fR
+Model role: default|coder|researcher|opsec
+.SH INJECTION SAFETY
+A loop's task text is data, never authority. A payload that tries to grant a
+permission, widen the declared scope, or write authorization or scope context is
+refused when the loop starts, and the same check runs again before every pass.
+The refusal is logged as a class and a rule label; the matched text is never
+logged, so it cannot be replayed. A pass runs under the configured permission
+matrix, scope and sandbox exactly as a typed turn does.
+.SH EXAMPLES
+Watch a deploy every two minutes, up to eight checks:
+.PP
+  $ kintsugi loop 2m "check whether the staging deploy is healthy"
+.PP
+Poll a test suite every 30 seconds on the cheap model:
+.PP
+  $ kintsugi loop --role coder --max 20 30s "run the unit tests and report failures"
+.PP
+One line per pass, in a script:
+.PP
+  $ kintsugi loop --quiet 1m "report the queue depth"
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-schedule (1),
+.BR kintsugi-run (1)

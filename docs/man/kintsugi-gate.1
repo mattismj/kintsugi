@@ -1,0 +1,35 @@
+.TH KINTSUGI-GATE 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-gate \- opsec review gate
+.SH SYNOPSIS
+.B kintsugi gate
+review \-\-diff <file|\-> [\-\-blocking] [\-\-json]
+.SH DESCRIPTION
+Run a read-only opsec review of a diff. The gate checks for security issues
+and policy violations.
+.SH OPTIONS
+.IP \fB\-\-diff\fR
+Diff file to review, or - for stdin (required)
+.IP \fB\-\-blocking\fR
+Exit non-zero on a non-pass verdict
+.IP \fB\-\-json\fR
+Print the typed review as JSON
+.SH EXAMPLES
+Review a diff file:
+.PP
+  $ kintsugi gate review --diff changes.patch
+.PP
+Review from stdin:
+.PP
+  $ git diff | kintsugi gate review --diff -
+.PP
+Blocking mode for CI:
+.PP
+  $ kintsugi gate review --diff changes.patch --blocking
+.PP
+JSON output:
+.PP
+  $ kintsugi gate review --diff changes.patch --json
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-dag (1)

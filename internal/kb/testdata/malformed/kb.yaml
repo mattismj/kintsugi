@@ -1,0 +1,5 @@
+id: malformed-fixture
+version: "1.0"
+title: "Malformed chunk fixture"
+source: "internal test fixture"
+license: "CC BY 4.0"

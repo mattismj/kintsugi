@@ -1,0 +1,258 @@
+# kintsugi configuration — copy to ~/.config/kintsugi/config.toml
+# Secrets are never stored here: keys come from the environment.
+
+[core]
+mode = "normal"                     # offline | normal  (offline refuses non-loopback endpoints)
+default_model = "deepseek/deepseek-chat"
+
+[persona_pack]
+dir = "~/.config/kintsugi/agents/global"
+fallback = "_base"
+match_order = ["explicit", "id_glob", "family", "capability", "fallback"]
+
+[context]
+enabled = true
+path = "CONTEXT.md"
+inject_budget_tokens = 1200
+curator_model = "deepseek/deepseek-chat"   # cheap model for curation; empty disables
+curator_on_session_end = false             # run curator after `kintsugi run`
+auto_accept_classes = ["state", "convention", "lesson"]
+gated_classes = ["authorization", "scope"] # never auto-written
+
+[behavior]
+dir = "~/.config/kintsugi/agents/behavior"
+default_profile = "coder-pipeline"
+
+[harness]
+tool_call_repair = true
+tool_call_repair_max = 2
+one_tool_per_turn = true
+max_tool_loops = 8
+compact_after = 24                      # mid-session compaction: turns before the older ones are summarized
+compact_keep_ratio = 0.4                # share of the conversation that stays verbatim
+
+[budget]
+max_prompt_tokens = 24000
+task_reserve_tokens = 4000
+
+# Providers: `kintsugi models` lists the built-in registry (open-weights cloud
+# endpoints + loopback runners, versioned in internal/config/providers.json).
+# A block here replaces the built-in entry for that provider; add any
+# OpenAI-compatible endpoint the same way. Keys are read at request time from
+# api_key_env, never from this file.
+#
+# `kintsugi connect <provider>` stores a key outside this file (0600, in
+# ~/.config/kintsugi/credentials.json). The api_key_env name is what the
+# credential store is keyed by, so a stored key satisfies api_key_env without
+# anything being written here — and an exported env var still wins over it.
+[providers.deepseek]
+base_url = "https://api.deepseek.com/v1"
+api_key_env = "DEEPSEEK_API_KEY"
+family = "deepseek"
+wire = "openai-completions"
+# Pin the exact Flash 4.1 id here once known; `deepseek-chat` currently aliases
+# the latest chat model and is matched by the deepseek-flash41 persona globs.
+models = ["deepseek-chat", { id = "deepseek-reasoner", reasoning = true }]
+
+[providers.moonshot]
+base_url = "https://api.moonshot.ai/v1"
+api_key_env = "MOONSHOT_API_KEY"
+family = "kimi"
+
+[providers.zhipu]
+base_url = "https://open.bigmodel.cn/api/paas/v4"
+api_key_env = "ZHIPU_API_KEY"
+family = "glm"
+
+[providers.dashscope]
+base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+api_key_env = "DASHSCOPE_API_KEY"
+family = "qwen"
+
+[providers.openrouter]
+base_url = "https://openrouter.ai/api/v1"
+api_key_env = "OPENROUTER_API_KEY"
+
+[permissions]
+# Workspace-relative globs. Omit allow_paths to allow everything not denied.
+deny_paths = ["**/.env", "**/.env.*", "**/id_rsa", "**/id_ed25519", "**/*.pem", "**/.git/**"]
+# Command prefixes that run without asking. Empty = always ask for bash.
+allow_commands = ["go test", "go build", "gofmt", "git status", "git diff", "git log"]
+# Regular expressions refused outright.
+deny_commands = ["rm\\s+-[a-zA-Z]*[rf][a-zA-Z]*\\s+/(\\s|$)", "\\bmkfs(\\.|\\s)", "\\bdd\\s+if=", ":\\(\\)\\s*\\{"]
+# Yolo mode: no approvals at all. Only set this deliberately.
+yolo = false
+# Permission mode baseline (M9.4): default | accept-edits | plan | yolo | dont-ask.
+# Rules refine it; deny always wins, then ask, then allow. An allow rule must
+# name a tool — a bare "*" never grants capability.
+# mode = "default"
+# [[permissions.rules]]
+# tool = "bash"
+# spec = "git push*"
+# action = "ask"
+
+[intercept]
+# hard_stop: a refusal that repeats the same class in one turn is a stonewall;
+# stop retrying (a reminder does not move it) and hand back with a model-change
+# recommendation. hard_thinking: classify hard from absolute language in the
+# reasoning ("I will not", "I refuse") before the second retry.
+hard_stop = true
+hard_thinking = true
+# Mid-stream refusal detection: abort, inject the Authorization/Domain reminder,
+# resume. Disable for local abliterated models if you want raw streams.
+enabled = true
+max_retries = 2
+# Optional TOML override of the built-in lexicon:
+# lexicon_path = ".kintsugi/refusal_patterns.toml"
+#
+# Operator stream rules (I-70): the same interception machinery steered by your
+# own regexes. Three actions:
+#   redact — scrub the matched span from the stream and carry on; the transcript
+#            and the log never see it. For keys, tokens, real hostnames.
+#   inject — stop the stream, inject the rule's own text, retry from that point.
+#   abort  — stop the stream, remind, retry (the refusal path, with your rule).
+# A rule hit is recorded as {rule, action, reason, count} and never the matched
+# text, so a rule can never turn model prose into a record.
+# Defaults to .kintsugi/stream_rules.toml when that file exists.
+# rules_path = ".kintsugi/stream_rules.toml"
+
+[ui]
+banner = true
+alt_screen = true
+ornament = true
+plain = false
+mouse = true            # mouse-wheel scrolling (cell-motion capture only); --no-mouse disables
+[notify]
+# Raise approval-needed / turn-done / quota-warn to the operator's terminal.
+# Off by default: a harness that pings the desktop is a decision, not a default.
+#   off | bell | osc9 | osc777 | command
+# Nothing here leaves the machine — osc/bell write to this terminal, and the
+# command backend runs one named executable with the message as argv (no shell).
+backend = "off"
+# command = "notify-send"   # only read when backend = "command"
+
+[acp]
+# The external-agent adapter a DAG's `acp:` nodes drive. The adapter spawns a
+# separate agent process and *observes* its tool calls — it never executes them
+# on the agent's behalf, and it never reads this harness's credentials.
+# Every field is optional; the zero value below is the recommended posture.
+# off = true          # disable the adapter: an `acp:` node then fails as an
+#                     # unknown role instead of spawning anything
+# timeout = "30s"         # handshake and each control request
+# prompt_timeout = "10m"  # one prompt turn (one node attempt)
+# cancel_grace = "5s"     # wait after session/cancel before killing the process
+
+[advisor]
+# During-the-work secondary reviewer (aside/concern/blocker notes). When
+# `enabled` is omitted the profile decides: lab = on, plain = off.
+# enabled = false
+model = ""          # provider/model; empty = same as the working model
+max_tokens = 20000  # approximate session cap
+
+[agents]
+subagents = true    # expose the `task` tool (requires a git workspace)
+max_subagents = 3
+timeout_s = 300
+# worktree_dir = "" # empty = system temp
+
+[skills]
+# Progressive disclosure: only names/descriptions enter the prompt; bodies
+# load through the `skill` tool. Relative paths resolve against the workspace.
+dir = ".kintsugi/skills"
+
+[mcp]
+# Local stdio Model Context Protocol servers. Each tool is exposed as
+# mcp__<server>__<tool> and requires approval like any other tool.
+enabled = true
+
+# [mcp.servers.fetch]
+# command = "uvx"
+# args = ["mcp-server-fetch"]
+# env = { LOG_LEVEL = "warn" }   # secrets should be exported by the parent, not stored here
+# timeout_s = 60
+
+[gates]
+# Opsec review of diffs; advisory unless blocking is set.
+model = ""          # empty = default model
+blocking = false
+max_revisions = 1
+
+[roles]
+# Each role is a (model, persona) pair. Empty model = core.default_model.
+default = ""
+coder = ""
+researcher = ""     # e.g. a cheap fast model
+opsec = ""          # e.g. a stronger reviewer
+
+[roles.personas]
+# coder = "deepseek-flash41"
+# opsec = "deepseek-flash41"
+
+[quota.deepseek]
+# Offline accounting, not a provider API call. Usage is approximate unless the
+# provider returns exact token counts. Omit a provider for unlimited.
+limit_tokens = 2000000
+reset = "daily"     # daily | weekly | monthly | none
+note = "flat plan"
+
+# [retention]
+# max_sessions = 200      # keep the newest N; 0 = unlimited
+# max_age_days = 0        # delete sessions older than N days; 0 = keep forever
+
+[continuity]
+# Local continuity layer: the context ledger + prior-work recall.
+# Positive accepted work only; refusals are telemetry, never memory.
+enabled = true
+prior_work_top_k = 5                 # entries recalled per task (DESIGN §16.23: ≤5)
+prior_work_budget_tokens = 600       # hard cap on the rendered prior-work block
+preflight = true                     # score the first task locally before injecting the frame
+guard_on_refusal = true              # re-inject prior accepted work when a turn drifts
+ledger = ".kintsugi/ledger"        # relative to the workspace; ledger.md is the source of truth
+
+[research]
+# Web search backends, tried in order; the first that answers wins.
+# "duckduckgo" is keyless, so a fresh install still works.
+search_backends = ["duckduckgo", "brave", "tavily"]
+brave_api_key_env = "BRAVE_SEARCH_API_KEY"
+tavily_api_key_env = "TAVILY_API_KEY"
+timeout_s = 15
+
+[sandbox]
+# OS isolation for shell commands (Linux, bubblewrap).
+# off    — run commands as before
+# readonly — the workspace is read-only
+# workspace — the workspace is the only writable path
+mode = "off"
+network = "none"          # none | loopback | allowlist
+allowlist = []            # hosts reachable when network = allowlist
+binary = "bwrap"
+
+[scope]
+# The declared engagement scope, enforced by the tool layer (not by the model).
+# Empty means "nothing declared" — everything is allowed.
+paths = []                # workspace-relative globs
+commands = []             # prefixes or wildcards
+hosts = []                # exact, suffix or wildcard
+out_of_scope = []         # explicit deny list; always wins
+
+[hooks]
+# Lifecycle hooks (M9.1). Project hooks (.kintsugi/hooks.toml) only run after
+# `kintsugi hooks trust`; these operator hooks always run.
+# [[hooks.PreToolUse]]
+# matcher = "bash"
+# command = "./scripts/check-command.sh"   # exit 2 blocks the call
+
+[mods]
+# External-process plugins (M12.5). Off by default; project mods need the same
+# trust marker as project hooks.
+enabled = false
+dir = ".kintsugi/mods"
+
+[lab]
+# Compose-managed fixture environment (M8). While the lab is up, host bash is
+# refused and work runs inside the project via run_in_lab.
+runtime = "auto"            # auto | docker | podman
+compose_file = "lab/docker-compose.yml"
+project = "kintsugi-lab"
+services = []
+network = ""

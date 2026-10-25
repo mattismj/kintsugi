@@ -1,0 +1,48 @@
+.TH KINTSUGI-REVIEW 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-review \- read-only code review of a diff
+.SH SYNOPSIS
+.B kintsugi review
+.RI [ ref ]
+.RB [ \-\-json ]
+.RB [ \-\-ship\-check ]
+.SH DESCRIPTION
+Read the change, ask the gate model what is wrong with it, and print findings by
+severity with a ship/no-ship verdict.
+.PP
+With no \fIref\fR the working tree is judged; with one, the diff against that ref
+is (a branch name or a commit both work).
+.PP
+The reviewer is read-only by construction: it is handed a diff, it returns
+findings, and it holds no tool access. Nothing here writes, stages or commits.
+.PP
+Findings are graded P0-P3. A P0 or P1 drives a no-ship verdict:
+.IP \fBP0\fR
+security vulnerabilities, data loss, crashes, correctness bugs
+.IP \fBP1\fR
+performance issues, resource leaks, race conditions
+.IP \fBP2\fR
+code quality, maintainability, missing error handling
+.IP \fBP3\fR
+style, naming, documentation
+.SH OPTIONS
+.IP \fB\-\-json\fR
+Print the typed review as JSON.
+.IP \fB\-\-ship\-check\fR
+Exit non-zero when the verdict is no-ship, for use in a script.
+.SH EXAMPLES
+Review the working tree:
+.PP
+  $ kintsugi review
+.PP
+Review a branch:
+.PP
+  $ kintsugi review main
+.PP
+Fail a script on a no-ship verdict:
+.PP
+  $ kintsugi review --ship-check
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-gate (1),
+.BR kintsugi-commit (1)

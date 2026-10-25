@@ -1,0 +1,26 @@
+.TH KINTSUGI-VALIDATE 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-validate \- provider validation
+.SH SYNOPSIS
+.B kintsugi validate
+[\-\-provider <name>] [\-\-model <id>] [\-\-timeout <duration>]
+.SH DESCRIPTION
+Run a live validation battery for a provider/model.
+.SH OPTIONS
+.IP \fB\-\-provider\fR
+Provider name
+.IP \fB\-\-model\fR
+Model id
+.IP \fB\-\-timeout\fR
+Validation timeout
+.SH EXAMPLES
+Validate default provider:
+.PP
+  $ kintsugi validate
+.PP
+Validate specific provider:
+.PP
+  $ kintsugi validate --provider ollama
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-doctor (1)

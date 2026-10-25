@@ -1,0 +1,63 @@
+.TH KINTSUGI-SESSION 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-session \- session management
+.SH SYNOPSIS
+.B kintsugi session
+list
+.br
+.B kintsugi session
+show <id>
+.br
+.B kintsugi session
+rename <id> "<title>"
+.br
+.B kintsugi session
+search <query>
+.br
+.B kintsugi session
+fork <id>
+.br
+.B kintsugi session
+export <id>
+.SH DESCRIPTION
+Manage sessions: list, view, rename, search, fork, and export.
+.SH COMMANDS
+.IP \fBlist\fR
+Index sessions by title/model/persona/turns
+.IP \fBshow\fR
+Replay a session log
+.IP \fBrename\fR
+Set a session's title
+.IP \fBsearch\fR
+Search transcripts
+.IP \fBfork\fR
+Copy a session into a new branch
+.IP \fBexport\fR
+Write a session as legacy JSONL
+.SH EXAMPLES
+List sessions:
+.PP
+  $ kintsugi session list
+.PP
+View a session:
+.PP
+  $ kintsugi session show abc123
+.PP
+Rename a session:
+.PP
+  $ kintsugi session rename abc123 "refactor auth"
+.PP
+Search sessions:
+.PP
+  $ kintsugi session search "authentication bug"
+.PP
+Fork a session:
+.PP
+  $ kintsugi session fork abc123
+.PP
+Export as JSONL:
+.PP
+  $ kintsugi session export abc123
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-run (1)

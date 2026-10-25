@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "providers": {
+    "deepseek": {
+      "base_url": "https://api.deepseek.com/v1",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "family": "deepseek",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "deepseek-chat", "context": 131072},
+        {"id": "deepseek-reasoner", "context": 131072, "reasoning": true}
+      ]
+    },
+    "moonshot": {
+      "base_url": "https://api.moonshot.ai/v1",
+      "api_key_env": "MOONSHOT_API_KEY",
+      "family": "kimi",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "kimi-k2-turbo-preview", "context": 262144},
+        {"id": "kimi-k2-0711-preview", "context": 262144},
+        {"id": "moonshot-v1-128k", "context": 131072}
+      ]
+    },
+    "zhipu": {
+      "base_url": "https://open.bigmodel.cn/api/paas/v4",
+      "api_key_env": "ZHIPU_API_KEY",
+      "family": "glm",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "glm-4.6", "context": 204800},
+        {"id": "glm-4.5", "context": 131072},
+        {"id": "glm-4.5-air", "context": 131072}
+      ]
+    },
+    "zai": {
+      "base_url": "https://api.z.ai/api/paas/v4",
+      "api_key_env": "ZAI_API_KEY",
+      "family": "glm",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "glm-4.6", "context": 204800},
+        {"id": "glm-4.5", "context": 131072}
+      ]
+    },
+    "dashscope": {
+      "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "api_key_env": "DASHSCOPE_API_KEY",
+      "family": "qwen",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "qwen3-coder-plus"},
+        {"id": "qwen3-max"},
+        {"id": "qwen-plus"}
+      ]
+    },
+    "alibaba-coding-plan": {
+      "base_url": "https://coding-intl.dashscope.aliyuncs.com/v1",
+      "api_key_env": "ALIBABA_CODING_PLAN_API_KEY",
+      "family": "qwen",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "qwen3-coder-plus"},
+        {"id": "qwen3-max"},
+        {"id": "qwen-plus"}
+      ]
+    },
+    "alibaba-token-plan": {
+      "base_url": "https://token-plan.ap-southeast-1.maas.aliyuncs.com/compatible-mode/v1",
+      "api_key_env": "ALIBABA_TOKEN_PLAN_API_KEY",
+      "family": "qwen",
+      "models": [
+        {"id": "qwen3-coder-plus"},
+        {"id": "qwen3-max"},
+        {"id": "qwen-plus"}
+      ],
+      "wire": "openai-completions"
+    },
+    "openrouter": {
+      "base_url": "https://openrouter.ai/api/v1",
+      "api_key_env": "OPENROUTER_API_KEY",
+      "wire": "openai-completions"
+    },
+    "cline-pass": {
+      "base_url": "https://api.cline.bot/api/v1",
+      "api_key_env": "CLINE_PASS_API_KEY",
+      "wire": "openai-completions"
+    },
+    "opencode-go": {
+      "base_url": "https://opencode.ai/zen/go/v1",
+      "api_key_env": "OPENCODE_GO_API_KEY",
+      "wire": "openai-completions"
+    },
+    "commandcode": {
+      "base_url": "https://api.commandcode.ai/provider",
+      "api_key_env": "COMMANDCODE_API_KEY",
+      "wire": "openai-completions"
+    },
+    "together": {
+      "base_url": "https://api.together.xyz/v1",
+      "api_key_env": "TOGETHER_API_KEY",
+      "wire": "openai-completions"
+    },
+    "fireworks": {
+      "base_url": "https://api.fireworks.ai/inference/v1",
+      "api_key_env": "FIREWORKS_API_KEY",
+      "wire": "openai-completions"
+    },
+    "groq": {
+      "base_url": "https://api.groq.com/openai/v1",
+      "api_key_env": "GROQ_API_KEY",
+      "wire": "openai-completions"
+    },
+    "cerebras": {
+      "base_url": "https://api.cerebras.ai/v1",
+      "api_key_env": "CEREBRAS_API_KEY",
+      "wire": "openai-completions"
+    },
+    "mistral": {
+      "base_url": "https://api.mistral.ai/v1",
+      "api_key_env": "MISTRAL_API_KEY",
+      "wire": "openai-completions",
+      "models": [
+        {"id": "mistral-large-latest", "context": 131072},
+        {"id": "codestral-latest", "context": 262144},
+        {"id": "devstral-medium-latest", "context": 131072}
+      ]
+    },
+    "siliconflow": {
+      "base_url": "https://api.siliconflow.cn/v1",
+      "api_key_env": "SILICONFLOW_API_KEY",
+      "wire": "openai-completions"
+    },
+    "deepinfra": {
+      "base_url": "https://api.deepinfra.com/v1/openai",
+      "api_key_env": "DEEPINFRA_API_KEY",
+      "wire": "openai-completions"
+    },
+    "novita": {
+      "base_url": "https://api.novita.ai/v3/openai",
+      "api_key_env": "NOVITA_API_KEY",
+      "wire": "openai-completions"
+    },
+    "hyperbolic": {
+      "base_url": "https://api.hyperbolic.xyz/v1",
+      "api_key_env": "HYPERBOLIC_API_KEY",
+      "wire": "openai-completions"
+    },
+    "nebius": {
+      "base_url": "https://api.studio.nebius.com/v1",
+      "api_key_env": "NEBIUS_API_KEY",
+      "wire": "openai-completions"
+    },
+    "sambanova": {
+      "base_url": "https://api.sambanova.ai/v1",
+      "api_key_env": "SAMBANOVA_API_KEY",
+      "wire": "openai-completions"
+    },
+    "nvidia": {
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "api_key_env": "NVIDIA_API_KEY",
+      "wire": "openai-completions"
+    },
+    "huggingface": {
+      "base_url": "https://router.huggingface.co/v1",
+      "api_key_env": "HF_TOKEN",
+      "wire": "openai-completions"
+    },
+    "minimax": {
+      "base_url": "https://api.minimax.io/v1",
+      "api_key_env": "MINIMAX_API_KEY",
+      "wire": "openai-completions"
+    },
+    "baichuan": {
+      "base_url": "https://api.baichuan-ai.com/v1",
+      "api_key_env": "BAICHUAN_API_KEY",
+      "wire": "openai-completions"
+    },
+    "yi": {
+      "base_url": "https://api.lingyiwanwu.com/v1",
+      "api_key_env": "YI_API_KEY",
+      "wire": "openai-completions"
+    },
+    "stepfun": {
+      "base_url": "https://api.stepfun.com/v1",
+      "api_key_env": "STEPFUN_API_KEY",
+      "wire": "openai-completions"
+    },
+    "hunyuan": {
+      "base_url": "https://api.hunyuan.cloud.tencent.com/v1",
+      "api_key_env": "HUNYUAN_API_KEY",
+      "wire": "openai-completions"
+    },
+    "qianfan": {
+      "base_url": "https://qianfan.baidubce.com/v2",
+      "api_key_env": "QIANFAN_API_KEY",
+      "wire": "openai-completions"
+    },
+    "ollama": {
+      "base_url": "http://127.0.0.1:11434/v1",
+      "wire": "openai-completions",
+      "offline": true,
+      "reasoning_effort": "none"
+    },
+    "vllm": {
+      "base_url": "http://127.0.0.1:8000/v1",
+      "wire": "openai-completions",
+      "offline": true
+    },
+    "lmstudio": {
+      "base_url": "http://127.0.0.1:1234/v1",
+      "wire": "openai-completions",
+      "offline": true
+    },
+    "llamacpp": {
+      "base_url": "http://127.0.0.1:8080/v1",
+      "wire": "openai-completions",
+      "offline": true
+    }
+  }
+}

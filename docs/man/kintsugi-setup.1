@@ -1,0 +1,22 @@
+.TH KINTSUGI-SETUP 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-setup \- install persona pack and global config
+.SH SYNOPSIS
+.B kintsugi setup
+[\-\-model <ref>]
+.SH DESCRIPTION
+Install the persona pack and global AGENTS.md/config.
+.SH OPTIONS
+.IP \fB\-\-model\fR
+Default model reference
+.SH EXAMPLES
+Run setup:
+.PP
+  $ kintsugi setup
+.PP
+Set default model:
+.PP
+  $ kintsugi setup --model ollama/llama3
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-connect (1)

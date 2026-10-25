@@ -1,0 +1,51 @@
+# Synthetic, egress-free lab targets — {{PROJECT}} (blueprint: redteam)
+#
+# This file is the whole lab: two disposable intentionally-vulnerable public
+# lab services on an isolated internal network. `kintsugi lab up` starts
+# them, `kintsugi lab down` removes them with their volumes, and while it is
+# up the harness refuses host commands — the work runs in here.
+#
+#   - Public lab images. Both services are well-known intentionally
+#     vulnerable training targets, pulled from their public registries and
+#     run as-is: a deliberately vulnerable web application and a
+#     deliberately vulnerable API. They exist to be exploited by this
+#     workspace's tooling and by nothing else.
+#   - Egress-free. The services share an internal network with no external
+#     route, no published ports, and no DNS. Nothing here declares egress,
+#     and the harness adds none.
+#   - Disposable. Every capability dropped, no privilege escalation, no
+#     restart policy, nothing persisted between runs.
+#
+# The images are the only things ever pulled; point KINTSUGI_LAB_IMAGE_WEB
+# and KINTSUGI_LAB_IMAGE_API at local mirrors for an offline machine.
+
+services:
+  web:
+    # A deliberately vulnerable web application — the scanning and web
+    # exploitation target. Public training image, unchanged.
+    image: ${KINTSUGI_LAB_IMAGE_WEB:-vulnerables/web-dvwa:latest}
+    hostname: web.lab.example
+    networks:
+      lab: {}
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 5s
+
+  api:
+    # A deliberately vulnerable API service — the fingerprinting and
+    # protocol-exploitation target. Public training image, unchanged.
+    image: ${KINTSUGI_LAB_IMAGE_API:-eysteu/vulnapi:latest}
+    hostname: api.lab.example
+    networks:
+      lab: {}
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 5s
+
+networks:
+  lab:
+    internal: true

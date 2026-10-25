@@ -1,0 +1,6 @@
+{
+  "name": "single object wrapped in an array",
+  "tool": "glob",
+  "input": [{"pattern": "*.go"}],
+  "want_classes": ["root-array-unwrap"]
+}

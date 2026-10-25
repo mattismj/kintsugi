@@ -1,0 +1,45 @@
+.TH KINTSUGI-HOOKS 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-hooks \- manage workspace hooks
+.SH SYNOPSIS
+.B kintsugi hooks
+trust
+.br
+.B kintsugi hooks
+list
+.br
+.B kintsugi hooks
+status
+.br
+.B kintsugi hooks
+untrust
+.SH DESCRIPTION
+Manage workspace hooks. Hooks are scripts that run at specific points in the
+agent lifecycle. Project hooks must be explicitly trusted before they run.
+.SH COMMANDS
+.IP \fBtrust\fR
+Allow this workspace's project hooks to run
+.IP \fBlist\fR
+Show operator and project hooks with trust state
+.IP \fBstatus\fR
+Show whether this workspace is trusted
+.IP \fBuntrust\fR
+Revoke this workspace's trust marker
+.SH EXAMPLES
+Check hook trust status:
+.PP
+  $ kintsugi hooks status
+.PP
+List all hooks:
+.PP
+  $ kintsugi hooks list
+.PP
+Trust project hooks:
+.PP
+  $ kintsugi hooks trust
+.PP
+Revoke trust:
+.PP
+  $ kintsugi hooks untrust
+.SH SEE ALSO
+.BR kintsugi (1)

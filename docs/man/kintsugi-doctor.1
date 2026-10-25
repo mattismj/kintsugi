@@ -1,0 +1,23 @@
+.TH KINTSUGI-DOCTOR 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-doctor \- environment readiness check
+.SH SYNOPSIS
+.B kintsugi doctor
+[\-\-net]
+.SH DESCRIPTION
+Check environment readiness. Verifies configuration, providers, models, and
+workspace state.
+.SH OPTIONS
+.IP \fB\-\-net\fR
+Probe the default provider endpoint
+.SH EXAMPLES
+Basic check:
+.PP
+  $ kintsugi doctor
+.PP
+With network probe:
+.PP
+  $ kintsugi doctor --net
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-connect (1)

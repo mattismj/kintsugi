@@ -1,0 +1,29 @@
+.TH KINTSUGI-RULES 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-rules \- rule file management
+.SH SYNOPSIS
+.B kintsugi rules
+scan
+.br
+.B kintsugi rules
+import [\-\-apply]
+.SH DESCRIPTION
+Find and import rule files (AGENTS.md, .clinerules, .cursor rules).
+.SH COMMANDS
+.IP \fBscan\fR
+Find existing rule files
+.IP \fBimport\fR
+Report only; --apply writes the inherited layer
+.SH OPTIONS
+.IP \fB\-\-apply\fR
+Write the inherited layer
+.SH EXAMPLES
+Scan for rules:
+.PP
+  $ kintsugi rules scan
+.PP
+Import rules:
+.PP
+  $ kintsugi rules import --apply
+.SH SEE ALSO
+.BR kintsugi (1)

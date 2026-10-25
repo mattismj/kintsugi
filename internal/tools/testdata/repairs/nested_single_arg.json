@@ -1,0 +1,7 @@
+{
+  "name": "arguments wrapped in a single nested object",
+  "tool": "edit",
+  "input": {"args": {"path": "main.go", "old": "a", "new": "b"}},
+  "want_classes": ["nested-single-arg"],
+  "want_path": "main.go"
+}

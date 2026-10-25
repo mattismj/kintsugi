@@ -1,0 +1,17 @@
+.TH KINTSUGI-REWIND 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-rewind \- rewind to a checkpoint
+.SH SYNOPSIS
+.B kintsugi rewind
+<id> <ckpt-id>
+.SH DESCRIPTION
+Mark a session as rewound to a checkpoint. The checkpoint becomes the resume
+history.
+.SH EXAMPLES
+Rewind to a checkpoint:
+.PP
+  $ kintsugi rewind abc123 ckpt-456
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-checkpoint (1),
+.BR kintsugi-session (1)

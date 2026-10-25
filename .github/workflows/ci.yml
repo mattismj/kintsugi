@@ -1,0 +1,137 @@
+name: ci
+
+# The claim in README.md — "the suite is hermetic: no network" — is only true if
+# something proves it on every push. This workflow is that proof, and nothing
+# more: three jobs, each one failing for a reason a reader can act on.
+#
+# No secrets and no network access are required by any job. Every HTTP test in
+# the tree talks to a loopback httptest.Server (or a 127.0.0.1:9 sink that is
+# never dialled), and internal/validate forces core.mode = "offline" so a test
+# cannot reach a real host. If a future test genuinely needs egress, it must be
+# skipped unless an opt-in environment variable is set — gate it the way
+# internal/sandbox gates bubblewrap (t.Skip on the missing prerequisite) rather
+# than letting CI acquire a network dependency.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Superseded runs on the same branch are pointless: cancel them.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (build, vet, gofmt, unit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # The tree is pure Go — modernc.org/sqlite is the driver, so there is no
+      # cgo anywhere. Building and testing with CGO off is not a nicety: it is
+      # the posture the release binaries ship in (.goreleaser.yaml sets the same
+      # value), and running the suite this way proves the tree has not quietly
+      # acquired a cgo dependency.
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: set up Go
+        uses: actions/setup-go@v5
+        with:
+          # Single source of truth: the toolchain the module declares, not a
+          # version restated here that would drift from go.mod.
+          go-version-file: go.mod
+          # Module + build cache, keyed on go.sum.
+          cache: true
+
+      # Formatting is checked before anything expensive, because a stray
+      # gofmt diff is the cheapest possible failure and reports best first.
+      #
+      # No allowlist: the four internal/ files that used to need one are
+      # gofmt-clean now, and spike/ is the only exclusion — those are
+      # historical probes kept verbatim, not living code.
+      - name: gofmt
+        run: |
+          unformatted="$(gofmt -l . | grep -v '^spike/' || true)"
+          if [ -n "$unformatted" ]; then
+            echo "::error::gofmt reports unformatted files (spike/ is excluded by design):"
+            echo "$unformatted"
+            echo "fix with: gofmt -w <file>"
+            exit 1
+          fi
+          echo "gofmt: clean"
+
+      - name: build
+        run: go build ./...
+
+      - name: vet
+        run: go vet ./...
+
+      # -count=1 defeats the test cache, so a green run means the tests actually
+      # executed against this commit.
+      - name: test
+        run: go test ./... -count=1
+
+  race:
+    name: race (concurrency packages)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      # The race detector is implemented with cgo in the runtime — this is the
+      # one job that must build with cgo on. It says nothing about the tree's
+      # own dependencies, which are pure Go.
+      CGO_ENABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # Only the packages with real concurrency: the agent turn loop, the
+      # subagent hub, stream-rule interception, the JSON-RPC session manager,
+      # the TUI model and the clipboard writer. A -race run over the whole tree
+      # is slower without finding anything this list does not already cover.
+      - name: test -race
+        run: |
+          go test -race -count=1 \
+            ./internal/agent/ \
+            ./internal/hub/ \
+            ./internal/intercept/ \
+            ./internal/rpc/ \
+            ./internal/tui/ \
+            ./internal/clipboard/
+
+  docs:
+    name: docs (man page + reference completeness)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # Same pure-Go posture as the test job: no cgo, so no compiler needed.
+      CGO_ENABLED: "0"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      # These tests parse the dispatch switch in cmd/kintsugi/main.go and require a
+      # page for every top-level command, so adding a command without a man page
+      # or reference entry fails here — the dead-surface class of bug that
+      # `kintsugi lab` and `kintsugi mods` once shipped.
+      #
+      # They also skip themselves when docs/man is absent; running them as their
+      # own job from a repository checkout is what stops that skip from turning
+      # the cheapest failure in the tree into a silent pass.
+      - name: docs completeness
+        run: go test ./cmd/kintsugi/ -run 'Docs|ManPage|CommandReference' -count=1

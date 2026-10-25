@@ -1,0 +1,9 @@
+id: indexkb
+version: "1.0"
+title: "Index fixture KB"
+source: "kintsugi unit-test fixture"
+license: "CC BY 4.0"
+chunking:
+  strategy: per-technique
+  fields: [name, description, detection]
+index: .kintsugi/kb/indexkb.sqlite

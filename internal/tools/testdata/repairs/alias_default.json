@@ -1,0 +1,7 @@
+{
+  "name": "foreign harness parameter names",
+  "tool": "edit",
+  "input": {"file_path": "main.go", "old_string": "before", "new_string": "after"},
+  "want_classes": ["alias-default"],
+  "want_path": "main.go"
+}

@@ -1,0 +1,50 @@
+# Synthetic, egress-free lab fixture — {{PROJECT}} (blueprint: recon)
+#
+# This file is the whole lab: one disposable container that stands in for the
+# synthetic host a scan run is allowed to see. `kintsugi lab up` starts it,
+# `kintsugi lab down` removes it with its volumes, and while it is up the harness
+# refuses host commands — the work runs in here.
+#
+#   - Synthetic. Nothing in this file is malware, a real sample, or a
+#     weaponized payload, and it names no real host. The container runs no
+#     scanner and no service of its own: it is an inert fixture the operator's
+#     tooling and tests run against, and the only thing it does on its own is
+#     stay alive for a healthcheck.
+#   - Egress-free. `network_mode: none` means the container has no network at
+#     all — no interface, no DNS, no probe leaving it, and no published port.
+#     A discovery utility is validated against the fixture scope file under
+#     `fixtures/`, never against a reachable address.
+#   - Disposable and inert. Read-only root filesystem, a tmpfs for scratch
+#     space, every capability dropped, no privilege escalation, no restart
+#     policy, nothing persisted between runs.
+#
+# The image is the only thing ever pulled; point KINTSUGI_LAB_IMAGE at a local
+# mirror for an offline machine. The fixtures directory is mounted read-only:
+# the container can read the scope contract this workspace defines, never
+# write to it.
+
+services:
+  fixture:
+    image: ${KINTSUGI_LAB_IMAGE:-alpine:3.20}
+    hostname: fixture.lab.example
+    command:
+      - sh
+      - -c
+      - "echo '{{PROJECT}} scan fixture ready (synthetic, no network)'; while true; do sleep 5; done"
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ../fixtures:/fixtures:ro
+    healthcheck:
+      test: ["CMD", "sh", "-c", "test -w /tmp"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    stop_grace_period: 5s

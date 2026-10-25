@@ -1,0 +1,27 @@
+.TH KINTSUGI-PACK 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-pack \- persona pack management
+.SH SYNOPSIS
+.B kintsugi pack
+list
+.br
+.B kintsugi pack
+show <persona>
+.SH DESCRIPTION
+Manage the persona pack. Personas define the agent's behavior and personality.
+.SH COMMANDS
+.IP \fBlist\fR
+Show personas and their match rules
+.IP \fBshow\fR
+View a persona's full definition
+.SH EXAMPLES
+List personas:
+.PP
+  $ kintsugi pack list
+.PP
+View a persona:
+.PP
+  $ kintsugi pack show coder
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-persona (1)

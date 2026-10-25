@@ -1,0 +1,5 @@
+id: minimal
+version: 2
+title: "Minimal fixture"
+source: "internal test fixture"
+license: "CC BY 4.0"

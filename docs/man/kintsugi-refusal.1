@@ -1,0 +1,111 @@
+.TH KINTSUGI-REFUSAL 1 "2026-10-24" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-refusal \- refusal interception: telemetry and the lexicon that detects refusals
+.SH SYNOPSIS
+.B kintsugi refusal
+stats
+.br
+.B kintsugi refusal
+trends
+.br
+.B kintsugi refusal
+list
+.br
+.B kintsugi refusal
+add
+.I class regex
+.br
+.B kintsugi refusal
+test
+.I "sample assistant text"
+.br
+.B kintsugi refusal
+disable
+.I class
+.br
+.B kintsugi refusal
+restore
+.br
+.B kintsugi refusal
+export [session-id]
+.I class
+.SH DESCRIPTION
+\fBforge refusal\fR is the operator-facing surface for refusal interception.
+Two halves of the same idea live here:
+.IP \(bu 2
+\fBstats\fR/\fBtrends\fR read the interception telemetry. Refusals are
+telemetry, never memory: only counters (model, persona, class, outcome) are
+kept, never the matched phrase or the refused prose.
+.IP \(bu 2
+\fBlist\fR/\fBadd\fR/\fBtest\fR/\fBdisable\fR/\fBrestore\fR edit the lexicon
+itself \(em the regex denylist the live scanner matches against. Every command
+works against the same file the loader reads, so a pattern added at the CLI
+is in force on the next turn with no restart.
+.PP
+The override file lives at \fI.kintsugi/refusal_patterns.toml\fR (or wherever
+\fBintercept.lexicon_path\fR points). Classes present in the file replace the
+built-in class wholesale; classes absent keep their defaults. An empty list
+disables a class.
+.SH COMMANDS
+.IP \fBstats\fR
+Show refusal interception rates by model/persona
+.IP \fBtrends\fR
+Show refusal and drift trends
+.IP \fBlist\fR
+Print the effective lexicon: every class, every pattern, where each came
+from (default or operator), and the per-class hit count from telemetry
+.IP "\fBadd\fR \fIclass\fR \fIregex\fR"
+Append a regex to a class in the override file. The regex is compiled before
+it is written; a pattern that does not parse is refused. Creating a class that
+did not exist replaces the built-in class for it.
+.IP "\fBtest\fR \fI\"sample\"\fR"
+Run a sample of assistant prose through the scanner the way the harness does
+(fenced code, inline code, blockquotes and double-quoted spans are scrubbed
+first). Prints every matching pattern with its class, the matched phrase, the
+pattern source and its origin.
+.IP "\fBdisable\fR \fIclass\fR"
+Empty a class in the override file, turning it off.
+.IP "\fBrestore\fR \fIclass\fR"
+Remove a class from the override file so the built-in class applies again.
+.SH THE OVERRIDE FILE
+.PP
+.EX
+# Operator override of the refusal lexicon.
+# Classes present here replace the built-in class; classes absent keep defaults.
+# An empty list disables a class. Run \(gaforge refusal test\(ga to check coverage.
+
+[classes]
+moralizing = ["\e\ebI (?:can't|cannot) assist\e\eb"]
+off-topic-safety = []
+.EE
+.PP
+The built-in classes are \fBmoralizing\fR, \fBidentity\fR, \fBlegal-lecture\fR,
+\fBsafety-lecture\fR, \fBoff-topic-safety\fR. They are deliberately narrow: a
+false positive interrupts a turn.
+.SH EXAMPLES
+See the effective lexicon and per-class hit counts:
+.PP
+.RS
+.nf
+$ kintsugi refusal list
+.RE
+.fi
+.PP
+Teach the lexicon a new refusal phrasing, then verify it fires:
+.PP
+.RS
+.nf
+$ kintsugi refusal add moralizing '\e\ebI am not (?:able|willing) to (?:help|assist)\e\eb'
+$ kintsugi refusal test "I am not able to help with that."
+.RE
+.fi
+.SH CORPUS
+.IP "\fBcorpus add\fR"
+Append refusal texts to the operator-local corpus (never uploaded); extract from an export report with \fB--file\fR.
+.IP "\fBcorpus stats\fR"
+Corpus size and the current lexicon's coverage over it.
+.IP "\fBcorpus propose\fR [--min N] [--apply]"
+Find recurring phrases across missed texts, propose patterns, and with --apply write them through the lexicon validation path.
+.SH SEE ALSO
+.BR kintsugi-persona (1),
+.BR kintsugi (1)

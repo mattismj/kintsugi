@@ -1,0 +1,40 @@
+.TH KINTSUGI-TASTE 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-taste \- operator taste preferences
+.SH SYNOPSIS
+.B kintsugi taste
+list [\-\-json]
+.br
+.B kintsugi taste
+open
+.br
+.B kintsugi taste
+lint
+.SH DESCRIPTION
+Manage operator taste preferences. Taste is local-only: no remote sync, no
+model-authored policy. Every accept/reject/edit of a proposed change becomes a
+local signal.
+.SH COMMANDS
+.IP \fBlist\fR
+Show taste bullets, project + global
+.IP \fBopen\fR
+Print the taste file path and content
+.IP \fBlint\fR
+Reject bullets without a date or kind
+.SH OPTIONS
+.IP \fB\-\-json\fR
+Output as JSON
+.SH EXAMPLES
+List preferences:
+.PP
+  $ kintsugi taste list
+.PP
+Open taste file:
+.PP
+  $ kintsugi taste open
+.PP
+Validate taste file:
+.PP
+  $ kintsugi taste lint
+.SH SEE ALSO
+.BR kintsugi (1)

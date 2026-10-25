@@ -1,0 +1,88 @@
+.TH KINTSUGI-CONTEXT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-context \- manage CONTEXT.md
+.SH SYNOPSIS
+.B kintsugi context
+init [\-\-force]
+.br
+.B kintsugi context
+show
+.br
+.B kintsugi context
+why "<question>"
+.br
+.B kintsugi context
+diff
+.br
+.B kintsugi context
+apply [\-\-all] [\-\-gated]
+.br
+.B kintsugi context
+curate
+.br
+.B kintsugi context
+refresh [\-\-apply]
+.br
+.B kintsugi context
+attest
+.SH DESCRIPTION
+Manage CONTEXT.md, the operator-authored document that defines authorization,
+domain, and scope. It is injected on every turn.
+.SH COMMANDS
+.IP "\fBinit\fR"
+Create CONTEXT.md. On a TTY an authorization template is picked from a menu;
+\fB--template\fR takes the choice directly. Every template ships a worked
+Authorization & scope example marked for replacement with the operator's own
+words — the curator gate is untouched.
+
+.IP \fBinit\fR
+Create CONTEXT.md from template
+.IP \fBshow\fR
+Show sections, hashes, gated markers
+.IP \fBwhy\fR
+Which injected context line says this
+.IP \fBdiff\fR
+Review curator proposals
+.IP \fBapply\fR
+Apply auto-accepted proposals
+.IP \fBcurate\fR
+Run the curator over a session
+.IP \fBrefresh\fR
+Rebuild Current state from signals
+.IP \fBattest\fR
+Record operator review of Authorization & scope
+.SH OPTIONS
+.IP \fB\-\-force\fR
+Overwrite existing file (init)
+.IP \fB\-\-all\fR
+Apply every non-gated proposal
+.IP \fB\-\-gated\fR
+Include authorization/scope proposals
+.IP \fB\-\-apply\fR
+Write changes (refresh)
+.SH EXAMPLES
+Initialize CONTEXT.md:
+.PP
+  $ kintsugi context init
+.PP
+Show context structure:
+.PP
+  $ kintsugi context show
+.PP
+Find context for a question:
+.PP
+  $ kintsugi context why "what databases can I access?"
+.PP
+Review curator proposals:
+.PP
+  $ kintsugi context diff
+.PP
+Apply proposals:
+.PP
+  $ kintsugi context apply --all
+.PP
+Attest authorization:
+.PP
+  $ kintsugi context attest
+.SH SEE ALSO
+.BR kintsugi (1)

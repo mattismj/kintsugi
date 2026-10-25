@@ -1,0 +1,35 @@
+.TH KINTSUGI-COMMIT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-commit \- split the working tree into atomic commits
+.SH SYNOPSIS
+.B kintsugi commit
+.RB [ \-\-apply ]
+.RB [ \-\-json ]
+.RB [ \-\-yes ]
+.SH DESCRIPTION
+Read the working tree, split unrelated changes into atomic commit groups ordered
+by dependency (source before the tests and docs that describe it), and generate a
+message per group from the diff.
+.PP
+Dry-run is the default and needs no trust: nothing is staged, nothing is
+committed, and git is not written to. \fB--apply\fR is the deliberate step; it
+asks for confirmation first. Nothing here ever pushes \- publishing stays the
+operator's own decision.
+.SH OPTIONS
+.IP \fB\-\-apply\fR
+Run git commit per group after confirmation.
+.IP \fB\-\-json\fR
+Print the plan as JSON instead of human-readable text.
+.IP \fB\-\-yes\fR
+Skip the confirmation prompt (only meaningful with \fB--apply\fR).
+.SH EXAMPLES
+Preview the commit groups:
+.PP
+  $ kintsugi commit
+.PP
+Commit them:
+.PP
+  $ kintsugi commit --apply
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-review (1)

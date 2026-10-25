@@ -1,0 +1,72 @@
+# AgentForge release packaging (M12-B).
+#
+# Deliberately minimal and honest: Linux binaries only, no Docker image, no
+# NFPM packages, no Homebrew tap, no signing/notarization. Nothing here claims
+# a distribution channel that does not exist yet — the artefacts are the
+# tarballs, their checksums and the LICENSE/NOTICE files, and that is all.
+#
+# Run with:  goreleaser release --clean        (needs a GITHUB_TOKEN)
+# Dry run:   goreleaser release --clean --snapshot --skip=publish
+# Checksums can also be produced without goreleaser: scripts/checksums.sh
+#
+# version: 2 is the current GoReleaser config schema.
+version: 2
+
+project_name: kintsugi
+
+before:
+  hooks:
+    # Fail the release before any binary is produced if the tree does not build.
+    # CGO_ENABLED=0 matches the build below on purpose: if a cgo dependency ever
+    # creeps into the tree, this hook fails here rather than letting the release
+    # produce a binary that only linked by accident on a machine with a C
+    # toolchain.
+    #
+    # Deliberately not `go mod tidy`: the module file is coordinator-owned and
+    # must not be rewritten by a release run.
+    - sh -c 'CGO_ENABLED=0 go build ./...'
+
+builds:
+  - id: kintsugi
+    main: ./cmd/kintsugi
+    binary: kintsugi
+    # Pure Go: no cgo anywhere in the tree (modernc.org/sqlite is the pure-Go
+    # driver), so the binaries are static and run on any Linux userland.
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      # Stamps main.version. The var has no dynamic initializer precisely so
+      # this -X survives; at runtime init() only resolves the version when the
+      # stamp is empty (see cmd/kintsugi/main.go).
+      - -s -w -X main.version={{ .Version }}
+
+archives:
+  - id: kintsugi
+    formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - NOTICE
+      - README.md
+
+checksum:
+  name_template: SHA256SUMS
+  algorithm: sha256
+
+changelog:
+  # No changelog generation: it would be authored from git log, and release
+  # notes are written by hand rather than derived from commit messages.
+  disable: true
+
+release:
+  # The operator decides when a tag becomes public; goreleaser must not create
+  # or publish a release on its own.
+  draft: true
+  prerelease: auto

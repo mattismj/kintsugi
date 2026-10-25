@@ -1,0 +1,21 @@
+.TH KINTSUGI-REPORT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-report \- findings report
+.SH SYNOPSIS
+.B kintsugi report
+[\-\-out <file>]
+.SH DESCRIPTION
+Generate a plain-text findings report including findings, telemetry, and quota.
+.SH OPTIONS
+.IP \fB\-\-out\fR
+Output file (default stdout)
+.SH EXAMPLES
+Print report:
+.PP
+  $ kintsugi report
+.PP
+Save to file:
+.PP
+  $ kintsugi report --out report.txt
+.SH SEE ALSO
+.BR kintsugi (1)

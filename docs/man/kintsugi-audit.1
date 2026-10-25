@@ -1,0 +1,37 @@
+.TH KINTSUGI-AUDIT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-audit \- view permission decisions
+.SH SYNOPSIS
+.B kintsugi audit
+[\-\-json] [\-\-clear] [\-\-n <limit>]
+.SH DESCRIPTION
+View permission decisions in this workspace. The audit log records what was
+allowed or refused, with the reason and the rule that decided it. It lives in
+the workspace and is never uploaded.
+.SH OPTIONS
+.IP \fB\-\-json\fR
+Print events as JSON
+.IP \fB\-\-clear\fR
+Truncate the audit log (asks first)
+.IP \fB\-\-n\fR
+How many events to print (default 50)
+.IP \fB\-\-yes\fR
+Do not ask before clearing
+.SH EXAMPLES
+View recent events:
+.PP
+  $ kintsugi audit
+.PP
+View as JSON:
+.PP
+  $ kintsugi audit --json
+.PP
+View last 100 events:
+.PP
+  $ kintsugi audit --n 100
+.PP
+Clear the log:
+.PP
+  $ kintsugi audit --clear
+.SH SEE ALSO
+.BR kintsugi (1)

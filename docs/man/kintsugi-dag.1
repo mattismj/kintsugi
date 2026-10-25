@@ -1,0 +1,29 @@
+.TH KINTSUGI-DAG 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-dag \- run a node plan
+.SH SYNOPSIS
+.B kintsugi dag
+run <plan.yaml> [\-\-json] [\-\-max\-revisions N]
+.SH DESCRIPTION
+Run a node plan with gates and revise cycles. DAG plans define a graph of
+tasks with dependencies.
+.SH OPTIONS
+.IP \fB\-\-json\fR
+Print the report as JSON
+.IP \fB\-\-max\-revisions\fR
+Blocking-gate revise cycles per node (default 1)
+.SH EXAMPLES
+Run a plan:
+.PP
+  $ kintsugi dag run plan.yaml
+.PP
+JSON output:
+.PP
+  $ kintsugi dag run plan.yaml --json
+.PP
+Allow more revisions:
+.PP
+  $ kintsugi dag run plan.yaml --max-revisions 3
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-gate (1)

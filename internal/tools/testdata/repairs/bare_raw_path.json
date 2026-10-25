@@ -1,0 +1,7 @@
+{
+  "name": "unquoted path string",
+  "tool": "read",
+  "input_string": "src/main.go",
+  "want_classes": ["bare-path"],
+  "want_path": "src/main.go"
+}

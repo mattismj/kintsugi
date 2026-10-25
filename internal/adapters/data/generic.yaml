@@ -1,0 +1,23 @@
+id: generic
+match:
+  family: []
+wire: openai-completions
+capabilities:
+  tools: true
+  strict_json_schema: unset
+  developer_role: false
+compat:
+  multiple_system_messages: true
+  assistant_after_tool_result: true
+  thinking_as_text: false
+  reasoning_content_field: reasoning_content
+  retry_without_strict_on_grammar_error: false
+  disable_reasoning_with_tools: false
+  filter_reasoning_history: true
+  openai_tool_call_id_limit: false
+
+quirks:
+  - "No family-specific fingerprint is known for this model. Be conservative: plain paths, one tool call per turn, explicit required arguments."
+instructions:
+  - "Emit one tool call per turn."
+  - "On a failing tool call, change the argument or the strategy. Never resubmit the identical call twice."

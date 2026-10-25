@@ -1,0 +1,45 @@
+.TH KINTSUGI-CONNECT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-connect \- verify and store provider API keys
+.SH SYNOPSIS
+.B kintsugi connect
+\-\-list
+.br
+.B kintsugi connect
+<provider> [\-\-no\-verify] [\-\-key\-stdin] [\-\-delete]
+.SH DESCRIPTION
+Verify and store provider API keys securely. Keys are stored with 0600
+permissions in the credential store. Environment variables take precedence over
+stored keys.
+.SH OPTIONS
+.IP \fB\-\-list\fR
+List configured providers and key status
+.IP \fB\-\-no\-verify\fR
+Save without pinging the provider first
+.IP \fB\-\-key\-stdin\fR
+Read the key from one line on stdin
+.IP \fB\-\-delete\fR
+Remove the stored key for the provider
+.SH EXAMPLES
+List all providers:
+.PP
+  $ kintsugi connect --list
+.PP
+Add a key interactively:
+.PP
+  $ kintsugi connect ollama
+.PP
+Add a key from stdin:
+.PP
+  $ echo "sk-..." | kintsugi connect openai --key-stdin
+.PP
+Skip verification:
+.PP
+  $ kintsugi connect custom-provider --no-verify
+.PP
+Remove a stored key:
+.PP
+  $ kintsugi connect ollama --delete
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-models (1)

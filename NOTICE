@@ -1,0 +1,152 @@
+AgentForge — NOTICE
+===================
+
+AgentForge is copyright the AgentForge authors and is distributed under the MIT
+license (see LICENSE).
+
+This file records what AgentForge borrows from other projects. Everything
+listed below is a **shape** — a wire format, a grammar, a file layout, a
+workflow, or a documented behaviour — that was reimplemented from public
+specifications, published documentation, or observed behaviour.
+
+**No source code was copied.** Nothing in this repository is derived from the
+source tree of any project named here, no file was transcribed, and no
+third-party code was vendored. Where a project's own license would have
+required carrying its notice into a copy, that requirement does not arise,
+because there is no copy. The attributions below are given because credit is
+owed for the ideas, and because one entry (MITRE ATT&CK) does carry content.
+
+Third-party Go modules that are genuine build dependencies
+(Bubble Tea, Lip Gloss, modernc.org/sqlite, BurntSushi/toml, yaml.v3,
+go-isatty and their transitive deps) are listed in go.mod and keep their own
+licenses; they are linked, not copied.
+
+
+1. Provider wire formats — OpenAI and Anthropic
+-----------------------------------------------
+
+What is borrowed: the *shapes* of the two chat APIs AgentForge speaks —
+OpenAI-compatible `POST /v1/chat/completions` (request/response JSON, the
+`messages`/`tools`/`tool_calls` fields, streaming `data: {…}` SSE deltas,
+`usage` accounting, `/v1/models`) and Anthropic Messages (`system` block array,
+`content` blocks, `cache_control` ephemeral breakpoints, `usage` with
+`cache_creation_input_tokens` / `cache_read_input_tokens`).
+
+Why attribution only: these are public, documented HTTP API contracts. Any
+client that speaks them must produce the same JSON. AgentForge's clients in
+internal/provider/ are independent implementations of the documented contract;
+no SDK code is used or copied.
+
+License/status: public API specifications. Trademarks belong to their owners
+("OpenAI", "Anthropic").
+
+
+2. apply_patch grammar — OpenAI Codex
+-------------------------------------
+
+What is borrowed: the envelope syntax of the `apply_patch` patch format
+(`*** Begin Patch` / `*** End Patch`, `*** Add File:`, `*** Update File:`,
+`*** Delete File:`, `*** Move to:`, `@@` hunk markers, leading-space context
+lines, `+`/`-` change lines) implemented by the `apply_patch` tool in
+internal/tools/patch.go.
+
+Why attribution only: the grammar is a published text format that models are
+trained to emit; AgentForge's parser is its own. OpenAI Codex is Apache-2.0,
+and this reimplementation carries no Apache-2.0 code, so no Apache NOTICE
+obligation attaches — the credit is for the format.
+
+License/status: format documented by OpenAI (Codex CLI, Apache-2.0).
+
+
+3. MITRE ATT&CK content — the one entry that carries data
+---------------------------------------------------------
+
+What is borrowed: `knowledgebases/attack/` ships a **starter subset** of MITRE
+ATT&CK® for Enterprise — a small number of technique chunks (for example
+T1027, T1055, T1059.001, T1071.001, T1078, T1021.001, T1041, T1053.005,
+T1102) rewritten as retrieval chunks for the `kb_search` / opsec-reviewer
+layer, plus the derived BM25 index that `forge kb build` produces from them.
+
+Attribution, as the license requires:
+
+    This product includes content from MITRE ATT&CK®.
+    ATT&CK® and MITRE ATT&CK® are registered trademarks of The MITRE
+    Corporation. Content © The MITRE Corporation, used under the
+    Creative Commons Attribution 4.0 International License (CC BY 4.0).
+    https://attack.mitre.org/ · https://attack.mitre.org/resources/terms-of-use/
+    License text: https://creativecommons.org/licenses/by/4.0/
+
+Provenance is recorded per chunk: every file under
+`knowledgebases/attack/chunks/` carries `source:` (the ATT&CK technique URL),
+`license: "CC BY 4.0"` and `retrieved_at:` in its front matter, and
+`knowledgebases/attack/kb.yaml` records the base, its version
+(`2026.10-starter`) and its license. The chunk prose is AgentForge-authored
+operator-facing text derived from those public technique descriptions, not a
+verbatim mirror of the ATT&CK dataset; the underlying facts and the technique
+identifiers remain MITRE's, under CC BY 4.0.
+
+Operator note: the subset is a **demo-sized** slice. Replacing it with a fuller
+ATT&CK extraction means re-checking this attribution and keeping the per-chunk
+provenance fields.
+
+
+4. Repair-catalogue ideas — Command Code
+----------------------------------------
+
+What is borrowed: the harness-engineering ideas documented in Command Code's
+public docs and reimplemented in internal/tools/repair.go — validate-then-
+repair on every tool call, a small catalogue of the failure classes that
+actually dominate open-weight models (`null-for-optional`, stringified numbers,
+missing required keys, unescaped JSON in arguments, fence-wrapped calls),
+per-(model, tool, class) repair telemetry, duplicate-failure loop breaking, and
+the cache-stability rule for the compiled prompt prefix (byte-identical above
+the task layer, no timestamps in system prompts).
+
+Why attribution only: these are documented behaviours, reimplemented
+independently. Command Code's repository license was recorded as *unverified* in
+ROADMAP.md, which is exactly why the borrow map restricts this project to
+ideas-from-docs: no code was read into this tree, and the ideas themselves are
+not copyrightable expression.
+
+
+5. Memory and skills layout ideas — oh-my-pi (MIT)
+--------------------------------------------------
+
+What is borrowed: layout and workflow ideas from oh-my-pi — a local markdown
+memory store with dated, append-only lessons; skills as markdown files with a
+name/description front matter that are listed and injected on demand; memory
+verbs over that store; an agent hub for background worker runs; and
+operator-authored stream rules. Reflected in internal/memory/, internal/skills/
+and internal/subagent/.
+
+Why attribution only: oh-my-pi is MIT-licensed, and MIT's condition attaches to
+copies of the software. AgentForge contains no oh-my-pi code — the file
+layouts and verb names are conventions, reimplemented here. The credit is
+recorded anyway, so the lineage of the design is not misread as invention.
+
+
+6. Repository map idea — aider (Apache-2.0)
+-------------------------------------------
+
+What is borrowed: the *idea* of a token-budgeted repository map — rank the
+repo's symbols, emit the highest-value ones as a compact tree/outline into the
+prompt, and stay inside a token budget — implemented in internal/tools/
+repomap.go, and the related plan-then-edit split (read-only architect phase,
+then an edit phase with the plan injected) in internal/forge/architect.go.
+
+Why attribution only: aider is Apache-2.0. AgentForge's implementation is its
+own and shares no code with aider, so no Apache-2.0 §4 notice obligation
+attaches; the attribution is for the concept.
+
+
+Also consulted, nothing borrowed
+---------------------------------
+
+Claude Code (hooks taxonomy, plan-mode posture), opencode (rules precedence,
+markdown agent files, `@file` references), Cline (`.clinerules/` scanning),
+Crush (Go single-binary TUI precedent), Hermes Agent (`SOUL.md`-style persona
+artifacts, context references), and the MCP/ACP specifications (transport
+shapes). These informed the design conversation recorded in DESIGN.md and
+ROADMAP.md; each relevant behaviour was reimplemented from its published
+description. See ROADMAP.md §"M9–M12 borrow map" for the per-milestone list and
+the license-verification status of each source.

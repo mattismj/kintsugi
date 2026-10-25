@@ -1,0 +1,32 @@
+.TH KINTSUGI-MODELS 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-models \- list providers and models
+.SH SYNOPSIS
+.B kintsugi models
+.br
+.B kintsugi models
+import <file> [\-\-write]
+.br
+.B kintsugi models
+fetch <provider> [\-\-write]
+.SH DESCRIPTION
+List configured providers and models, import model catalogs, or fetch a
+provider's model list.
+.SH OPTIONS
+.IP \fB\-\-write\fR
+Persist changes to config
+.SH EXAMPLES
+List all models:
+.PP
+  $ kintsugi models
+.PP
+Import a model catalog:
+.PP
+  $ kintsugi models import models.json --write
+.PP
+Fetch models from a provider:
+.PP
+  $ kintsugi models fetch ollama --write
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-connect (1)

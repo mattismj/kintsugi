@@ -1,0 +1,53 @@
+.TH KINTSUGI-MEMORY 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-memory \- lessons and skills search
+.SH SYNOPSIS
+.B kintsugi memory
+add "<lesson>" [\-\-models a,b] [\-\-source ...]
+.br
+.B kintsugi memory
+search "<query>" [\-\-k N]
+.br
+.B kintsugi memory
+reindex
+.br
+.B kintsugi memory
+list
+.SH DESCRIPTION
+Manage lessons and skills. Lessons are stored in .kintsugi/learned.md and
+indexed for full-text search.
+.SH COMMANDS
+.IP \fBadd\fR
+Append a lesson
+.IP \fBsearch\fR
+Search lessons and skills (FTS5)
+.IP \fBreindex\fR
+Rebuild the derived index
+.IP \fBlist\fR
+Show all lessons
+.SH OPTIONS
+.IP \fB\-\-models\fR
+Comma-separated model list (add)
+.IP \fB\-\-source\fR
+Source reference (add)
+.IP \fB\-\-k\fR
+Number of results (search, default 8)
+.SH EXAMPLES
+Add a lesson:
+.PP
+  $ kintsugi memory add "always use context managers for file I/O"
+.PP
+Search lessons:
+.PP
+  $ kintsugi memory search "file handling"
+.PP
+Rebuild index:
+.PP
+  $ kintsugi memory reindex
+.PP
+List all lessons:
+.PP
+  $ kintsugi memory list
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-recall (1)

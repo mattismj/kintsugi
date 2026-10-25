@@ -1,0 +1,6 @@
+{
+  "name": "path sent as a number",
+  "tool": "read",
+  "input": {"path": 42},
+  "want_error": "wrong type"
+}

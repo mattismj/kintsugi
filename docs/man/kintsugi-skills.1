@@ -1,0 +1,28 @@
+.TH KINTSUGI-SKILLS 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-skills \- workspace skills
+.SH SYNOPSIS
+.B kintsugi skills
+list
+.br
+.B kintsugi skills
+show <name>
+.SH DESCRIPTION
+List and view workspace skills. Skills are markdown files that teach the agent
+how to perform specific tasks.
+.SH COMMANDS
+.IP \fBlist\fR
+Show skills with name, description, path
+.IP \fBshow\fR
+Print a skill's full body
+.SH EXAMPLES
+List skills:
+.PP
+  $ kintsugi skills list
+.PP
+View a skill:
+.PP
+  $ kintsugi skills show git-commit
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-memory (1)

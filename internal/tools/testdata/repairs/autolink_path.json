@@ -1,0 +1,7 @@
+{
+  "name": "markdown autolink path",
+  "tool": "read",
+  "input": {"path": "[src/main.go](file:///home/ma/projects/kintsugi/src/main.go)"},
+  "want_classes": ["autolink-path"],
+  "want_path": "src/main.go"
+}

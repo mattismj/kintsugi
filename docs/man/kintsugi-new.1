@@ -1,0 +1,29 @@
+.TH KINTSUGI-NEW 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-new \- scaffold a project from a blueprint
+.SH SYNOPSIS
+.B kintsugi new
+[<blueprint>] <dir> [\-\-force]
+.SH DESCRIPTION
+Scaffold a new project from a blueprint. Blueprints provide templates for
+different project types.
+.SH OPTIONS
+.IP \fB\-\-force\fR
+Overwrite existing directory
+.SH EXAMPLES
+Create a new project:
+.PP
+  $ kintsugi new myproject
+.PP
+Use a specific blueprint:
+.PP
+  $ kintsugi new c2 myproject
+  $ kintsugi new detection my-detector
+  $ kintsugi new redteam my-tooling
+.PP
+Force overwrite:
+.PP
+  $ kintsugi new --force myproject
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-init (1)

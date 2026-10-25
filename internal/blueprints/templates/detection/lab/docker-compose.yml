@@ -1,0 +1,64 @@
+# Synthetic, egress-free detection lab — {{PROJECT}} (blueprint: detection)
+#
+# This file is the whole lab: two disposable containers — an event generator
+# and a receiver — connected on an isolated internal network. `kintsugi lab
+# up` starts them, `kintsugi lab down` removes them with their volumes, and
+# while it is up the harness refuses host commands — the work runs in here.
+#
+#   - Synthetic. The generator emits the recorded fixture events over the
+#     internal network; the receiver collects and counts them. Neither side
+#     is production anything: the generator is `grep`-able event replay, not
+#     an attack tool, and the receiver is a counter, not a SIEM.
+#   - Egress-free. The two services share an internal network with no
+#     external route, no published ports, and no DNS. Nothing here declares
+#     egress, and the harness adds none.
+#   - Disposable. Read-only root filesystems, tmpfs scratch, every
+#     capability dropped, nothing persisted between runs.
+#
+# The image is the only thing ever pulled; point KINTSUGI_LAB_IMAGE at a
+# local mirror for an offline machine. The fixtures directory is mounted
+# read-only on the generator: it replays the scope this workspace defines,
+# never writes to it.
+
+services:
+  generator:
+    image: ${KINTSUGI_LAB_IMAGE:-alpine:3.20}
+    hostname: generator.lab.example
+    command:
+      - sh
+      - -c
+      - "echo '{{PROJECT}} generator ready (synthetic, replay only)'; while true; do cat /fixtures/events/*.json 2>/dev/null | while read -r line; do echo \"$line\" | nc receiver 5140 || true; sleep 0.2; done; sleep 10; done"
+    networks:
+      lab: {}
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ../fixtures:/fixtures:ro
+    stop_grace_period: 5s
+
+  receiver:
+    image: ${KINTSUGI_LAB_IMAGE:-alpine:3.20}
+    hostname: receiver.lab.example
+    command:
+      - sh
+      - -c
+      - "echo '{{PROJECT}} receiver ready (counts events, stores nothing)'; nc -lk -p 5140 | while read -r line; do echo \"$line\" | tee -a /tmp/last-event.json >/dev/null; done"
+    networks:
+      lab: {}
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 5s
+
+networks:
+  lab:
+    internal: true

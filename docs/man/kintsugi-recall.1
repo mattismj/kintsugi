@@ -1,0 +1,24 @@
+.TH KINTSUGI-RECALL 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-recall \- search prior accepted work
+.SH SYNOPSIS
+.B kintsugi recall
+"<query>" [\-\-top N]
+.SH DESCRIPTION
+Search prior accepted work for a query. Returns the most relevant entries from
+the ledger.
+.SH OPTIONS
+.IP \fB\-\-top\fR
+Number of results (default 5)
+.SH EXAMPLES
+Search for prior work:
+.PP
+  $ kintsugi recall "authentication refactor"
+.PP
+Get more results:
+.PP
+  $ kintsugi recall "database migration" --top 10
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-ledger (1),
+.BR kintsugi-memory (1)

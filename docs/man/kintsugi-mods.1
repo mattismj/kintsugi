@@ -1,0 +1,42 @@
+.TH KINTSUGI-MODS 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-mods \- mod manifests
+.SH SYNOPSIS
+.B kintsugi mods
+list
+.br
+.B kintsugi mods
+trust
+.br
+.B kintsugi mods
+untrust
+.br
+.B kintsugi mods
+call <mod> <tool> <json>
+.SH DESCRIPTION
+Manage mod manifests. Mods are external tools that extend kintsugi's capabilities.
+Project mods must be explicitly trusted before they run.
+.SH COMMANDS
+.IP \fBlist\fR
+Show mod manifests with trust state
+.IP \fBtrust\fR
+Allow this workspace's project mods to run
+.IP \fBuntrust\fR
+Revoke this workspace's trust marker
+.IP \fBcall\fR
+Start one mod and call one of its tools
+.SH EXAMPLES
+List mods:
+.PP
+  $ kintsugi mods list
+.PP
+Trust project mods:
+.PP
+  $ kintsugi mods trust
+.PP
+Call a mod tool:
+.PP
+  $ kintsugi mods call mymod mytool '{"arg": "value"}'
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-hooks (1)

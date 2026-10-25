@@ -1,0 +1,48 @@
+.TH KINTSUGI-LEDGER 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-ledger \- accepted work ledger
+.SH SYNOPSIS
+.B kintsugi ledger
+list [\-\-kind <type>] [\-\-json]
+.br
+.B kintsugi ledger
+add
+.br
+.B kintsugi ledger
+export [\-\-file <path>]
+.SH DESCRIPTION
+Manage the accepted work ledger. The ledger tracks plans, artifacts, and
+decisions the operator has accepted.
+.SH COMMANDS
+.IP \fBlist\fR
+Show accepted work, newest first
+.IP \fBadd\fR
+Append one accepted entry
+.IP \fBexport\fR
+Write the ledger as JSONL
+.SH OPTIONS
+.IP \fB\-\-kind\fR
+Filter by entry type
+.IP \fB\-\-json\fR
+Output as JSON
+.IP \fB\-\-file\fR
+Output file path (export)
+.SH EXAMPLES
+List entries:
+.PP
+  $ kintsugi ledger list
+.PP
+Filter by kind:
+.PP
+  $ kintsugi ledger list --kind plan
+.PP
+Add an entry:
+.PP
+  $ kintsugi ledger add
+.PP
+Export as JSONL:
+.PP
+  $ kintsugi ledger export --out ledger.jsonl
+.SH SEE ALSO
+.BR kintsugi (1),
+.BR kintsugi-recall (1)

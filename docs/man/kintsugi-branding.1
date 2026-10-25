@@ -1,0 +1,55 @@
+.TH KINTSUGI-BRANDING 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-branding \- the Kintsugi identity kit
+.SH SYNOPSIS
+.B kintsugi branding
+wordmark
+.br
+.B kintsugi branding
+sigil
+.br
+.B kintsugi branding
+palette
+.br
+.B kintsugi branding
+export
+.I dir
+.SH DESCRIPTION
+Print the Kintsugi identity in the terminal, or export it as SVG assets.
+The art and the colours come from the same tables the TUI draws from, so an
+exported asset cannot disagree with what the terminal renders.
+.SH COMMANDS
+.IP "\fBwordmark\fR" 14
+Print the block KINTSUGI wordmark at its native 19 columns, shaded across the heat
+ramp from glow at the left to accent-deep at the right.
+.IP "\fBsigil\fR" 14
+Print the compact anvil mark: 6 rows by 13 columns, spark above the anvil.
+.IP "\fBpalette\fR" 14
+Print every design token with its name, hex value, 256-colour fallback and
+16-colour fallback, followed by a live swatch row. The output is honest about
+the active profile; under NO_COLOR, TERM=dumb or a non-terminal stdout it is
+plain text with no escape sequences.
+.IP "\fBexport\fR \fIdir\fR" 14
+Write
+.IR wordmark.svg ,
+.I sigil.svg
+and
+.I palette.svg
+into
+.IR dir ,
+creating it if needed. Each glyph is one rect on a cell grid inside a
+self-contained document with a viewBox and a background.
+.SH EXAMPLES
+Draw the wordmark:
+.PP
+  $ kintsugi branding wordmark
+.PP
+Inspect the palette for this terminal:
+.PP
+  $ kintsugi branding palette
+.PP
+Write the asset kit:
+.PP
+  $ kintsugi branding export branding/
+.SH SEE ALSO
+.BR kintsugi (1)

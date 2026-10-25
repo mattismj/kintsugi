@@ -1,0 +1,5 @@
+id: license-mix
+version: 1
+title: "Mixed-license fixture"
+source: "internal test fixture"
+license: "mixed"

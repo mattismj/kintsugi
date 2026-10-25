@@ -1,0 +1,7 @@
+{
+  "name": "null optional parameter",
+  "tool": "read",
+  "input": {"path": "README.md", "extra": null},
+  "want_classes": ["null-optional"],
+  "want_path": "README.md"
+}

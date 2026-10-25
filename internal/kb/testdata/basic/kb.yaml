@@ -1,0 +1,9 @@
+id: attack
+version: "15.1"
+title: "MITRE ATT&CK — curated execution subset"
+source: "MITRE ATT&CK (https://attack.mitre.org)"
+license: "CC BY 4.0"
+chunking:
+  strategy: per-technique
+  fields: [name, description, detection, platforms]
+index: .kintsugi/kb/attack.sqlite

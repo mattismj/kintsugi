@@ -1,0 +1,6 @@
+{
+  "name": "integer sent as a string",
+  "tool": "grep",
+  "input": {"pattern": "TODO", "max": "5"},
+  "want_classes": ["stringified-number"]
+}

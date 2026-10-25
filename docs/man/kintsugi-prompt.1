@@ -1,0 +1,41 @@
+.TH KINTSUGI-PROMPT 1 "2026-10-22" "kintsugi 0.8.0" "Kintsugi Manual"
+.SH NAME
+kintsugi-prompt \- inspect the compiled prompt
+.SH SYNOPSIS
+.B kintsugi prompt
+show [\-\-text] [\-\-json]
+.br
+.B kintsugi prompt
+diff
+.SH DESCRIPTION
+Inspect the compiled prompt manifest. The manifest shows what layers are
+injected and their token counts.
+.SH COMMANDS
+.IP "\fBtest\fR"
+Compile the prompt across every configured model and assert the invariants:
+layer order, budget compliance, determinism, stack hash. \fB--model\fR for one
+model, \fB--golden DIR\fR to write or diff manifests.
+
+.IP \fBshow\fR
+Compile and print the prompt manifest
+.IP \fBdiff\fR
+Diff this compile against the last one
+.SH OPTIONS
+.IP \fB\-\-text\fR
+Print the compiled prompt itself
+.IP \fB\-\-json\fR
+Print the manifest as JSON
+.SH EXAMPLES
+View manifest:
+.PP
+  $ kintsugi prompt show
+.PP
+View the prompt text:
+.PP
+  $ kintsugi prompt show --text
+.PP
+Compare to last compile:
+.PP
+  $ kintsugi prompt diff
+.SH SEE ALSO
+.BR kintsugi (1)

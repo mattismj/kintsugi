@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>How do I bound an HTTP fetch in Go? - Stack Overflow</title>
+<link rel="canonical" href="https://stackoverflow.com/questions/12345/how-do-i-bound-an-http-fetch-in-go">
+</head>
+<body>
+<div id="header">
+  <a href="/users/login">Log in</a>
+  <a href="/help/faq">Help</a>
+</div>
+<div id="question" class="question" data-questionid="12345">
+  <div class="postcell post-layout--right">
+    <div class="vote-count-post js-vote-count">17</div>
+    <div class="post-text js-post-body" itemprop="text">
+      <p>I want to cap the bytes <code>http.Get</code> reads. What is the idiomatic way?</p>
+      <pre class="lang-go"><code>resp.Body, err := io.ReadAll(resp.Body)</code></pre>
+      <p>See the <a href="https://pkg.go.dev/io#LimitReader">io.LimitReader docs</a>.</p>
+    </div>
+    <div class="post-tags">
+      <a href="/questions/tagged/go" class="post-tag" title="show questions tagged go">go</a>
+      <a href="/questions/tagged/http" class="post-tag" title="show questions tagged http">http</a>
+    </div>
+  </div>
+</div>
+<div class="answer accepted-answer js-answer" data-answerid="99">
+  <div class="vote-count-post js-vote-count">42</div>
+  <div class="postcell post-layout--right">
+    <div class="s-prose js-post-body" itemprop="text">
+      <p>Wrap the body in a limit reader and read one byte more than the cap, so you can tell truncation from a short body:</p>
+      <pre><code class="hljs language-go">body, err := io.ReadAll(io.LimitReader(resp.Body, int64(maxBytes)+1))
+if len(body) &gt; maxBytes {
+    body = body[:maxBytes]
+}</code></pre>
+      <p>Then close the body with <code>defer resp.Body.Close()</code>.</p>
+    </div>
+  </div>
+</div>
+<div class="answer js-answer" data-answerid="100">
+  <div class="s-prose js-post-body">
+    <p>Set <code>client.Timeout</code> too, or a stalled server hangs the call.</p>
+  </div>
+</div>
+</body>
+</html>
